@@ -6,13 +6,10 @@ A smart calculator for freelancers to determine optimal rates for on-site versus
 
 This application helps freelancers create accurate budget sheets and calculate realistic rates by:
 
-1. Create a personal budget but wizard based by taking in the local where
-   they come from, using possible templates they can choose from and then
-   navigating through the wizard to input their base rates.
-2. Calculate rates based on the selected location and expense model.
-3. Calculate an on-site rate based on the client's location. Proposals will
-   be done using online services to suggest the costs and how they will impact
-   your rates.
+1. Create a personal budget through a wizard that uses customizable templates as a starting point
+2. Categorize costs into "must-have", "wishful", and "realistic" budgets
+3. Calculate rates based on working days, accounting for holidays, education days, and vacations
+4. Generate on-site vs. remote work rate comparisons
 
 A free version of the app will be available under [rate-calculator.frevara.app](https://rate-calculator.frevara.app).
 
@@ -20,14 +17,32 @@ A free version of the app will be available under [rate-calculator.frevara.app](
 
 - **Backend**: Go (Golang)
 - **Frontend**: HTML + HTMX for interactive interfaces
-- **Data Storage**: database, postgresql
+- **Data Storage**: Firestore (with architecture supporting storage replacements)
+
+## Features
+
+### Cost Templates
+- Pre-defined and user-created cost templates
+- Templates can be private or public
+- Categories of expenses with monthly or yearly inputs
+- Costs categorized as "must-have", "wishful", or "realistic"
+
+### Working Schedule
+- Customizable working days selection
+- Country-specific templates for holidays and non-working days
+- Automatic calculation of available working hours
+
+### Rate Calculation
+- Remote work rate calculations
+- On-site rate calculations with travel expense considerations
+- Different rate views based on budget categories
 
 ## Getting Started
 
 ### Prerequisites
 
-- Go 1.24+
-- Postgresql
+- Go 1.20+
+- Google Cloud account for Firestore
 
 ### Installation
 
@@ -35,16 +50,27 @@ A free version of the app will be available under [rate-calculator.frevara.app](
 git clone https://github.com/yourusername/rate-calculator.git
 cd rate-calculator
 go mod download
-go run main.go
+go run cmd/app/main.go
+```
+
+### Configuration
+
+Create a `config.yaml` file with your Firestore credentials:
+
+```yaml
+storage:
+  firestore:
+    projectID: "your-project-id"
+    collection: "rate-calculator"
 ```
 
 ### Usage
 
 1. Navigate to `http://localhost:8080` in your browser
-2. Follow the wizard prompts to input your base rates
-3. Adjust the suggested values from online services as needed
-4. Toggle between on-site and remote scenarios to see different calculations
-5. Generate and export your final budget sheet
+2. Select or create a cost template
+3. Fill in your personal expense information
+4. Adjust working days and non-working periods
+5. View calculated rates for remote and on-site work
 
 ## Development
 
@@ -53,11 +79,14 @@ go run main.go
 ```
 rate-calculator/
 ├── cmd/                # Application entrypoints
+│   └── app/            # Main application
 ├── internal/           # Private application code
 │   ├── calculator/     # Rate calculation logic
-│   ├── services/       # External service integrations
+│   ├── storage/        # Storage interface and implementations
+│   │   ├── firestore/  # Firestore implementation
+│   │   └── memory/     # In-memory implementation for testing
+│   ├── model/          # Data models
 │   └── web/            # Web handlers and HTMX templates
-├── pkg/                # Public libraries
 ├── web/                # Frontend assets
 │   ├── templates/      # HTML templates
 │   ├── static/         # CSS, images, etc.
@@ -82,4 +111,4 @@ This project is licensed under the GNU Affero General Public License v3.0 (AGPL-
 ## Acknowledgments
 
 - HTMX for enabling rich interactions with minimal JavaScript
-- Various rate suggestion services for providing market data
+- Firebase Firestore for flexible data storage
