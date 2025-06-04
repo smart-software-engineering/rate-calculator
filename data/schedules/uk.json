@@ -1,0 +1,15 @@
+{
+  "ID": "uk",
+  "Label": "United Kingdom",
+  "Description": "Standard work schedule for the UK with bank holidays",
+  "UserID": "system",
+  "Public": true,
+  "SortOrder": 30,
+  "WorkSchedule": {
+    "HoursPerWeek": 37.5,
+    "VacationDays": 25,
+    "PublicHolidays": 8,
+    "EducationDays": 5,
+    "SickDays": 7
+  }
+}

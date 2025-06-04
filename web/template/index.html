@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Freelancer Hourly Rate Calculator</title>
+        <link rel="stylesheet" href="/app/css/app.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Freelancer Hourly Rate Calculator</h1>
+            </header>
+            <main>
+                <div class="calculator">
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input
+                            type="number"
+                            id="amount"
+                            placeholder="Enter amount"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="rate">Rate (%)</label>
+                        <input
+                            type="number"
+                            id="rate"
+                            placeholder="Enter rate"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="term">Term (months)</label>
+                        <input
+                            type="number"
+                            id="term"
+                            placeholder="Enter term"
+                        />
+                    </div>
+                    <button id="calculate">Calculate</button>
+                    <div class="result" id="result">
+                        <p>Result will appear here</p>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <p>&copy; 2023 Smart Software Engineering SRL</p>
+            </footer>
+        </div>
+        <script src="/app/js/app.js"></script>
+    </body>
+</html>

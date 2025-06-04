@@ -53,6 +53,26 @@ go mod download
 go run cmd/app/main.go
 ```
 
+### Development with Hot Reload
+
+For development, you can use Air for hot reloading:
+
+```
+# Install Air (if not already installed)
+go install github.com/cosmtrek/air@latest
+
+# Run the application with Air
+./dev.sh
+```
+
+Or manually:
+
+```
+air
+```
+
+This will automatically rebuild and restart the application when changes are detected in your source files.
+
 ### Configuration
 
 Create a `config.yaml` file with your Firestore credentials:
@@ -82,15 +102,21 @@ rate-calculator/
 │   └── app/            # Main application
 ├── internal/           # Private application code
 │   ├── calculator/     # Rate calculation logic
+│   ├── server/         # HTTP server with embedded assets
+│   │   ├── static/     # Embedded static files (CSS, JS)
+│   │   └── templates/  # Embedded HTML templates
 │   ├── storage/        # Storage interface and implementations
 │   │   ├── firestore/  # Firestore implementation
 │   │   └── memory/     # In-memory implementation for testing
 │   ├── model/          # Data models
 │   └── web/            # Web handlers and HTMX templates
 ├── web/                # Frontend assets
-│   ├── templates/      # HTML templates
-│   ├── static/         # CSS, images, etc.
-│   └── htmx/           # HTMX-specific components
+│   ├── template/       # HTML templates
+│   └── app/            # Static assets
+│       ├── css/        # CSS files
+│       └── js/         # JavaScript files
+├── .air.toml           # Air configuration for hot reload
+├── dev.sh              # Development script for running with Air
 └── README.md           # This file
 ```
 

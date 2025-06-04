@@ -1,0 +1,85 @@
+{{ define "partials/schedule_form" }}
+<div id="schedule-form">
+    <div class="time-parameters">
+        <div class="form-group">
+            <label for="hoursPerWeek">Hours per week</label>
+            <input
+                type="number"
+                id="hoursPerWeek"
+                name="schedule[hoursPerWeek]"
+                value="{{ .Schedule.HoursPerWeek }}"
+                min="1"
+                max="168"
+                step="0.5"
+                hx-post="/calculate-working-hours" 
+                hx-trigger="input delay:500ms" 
+                hx-target="#work-summary"
+                hx-indicator="#hours-indicator"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="vacationDays">Vacation days per year</label>
+            <input
+                type="number"
+                id="vacationDays"
+                name="schedule[vacationDays]"
+                value="{{ .Schedule.VacationDays }}"
+                min="0"
+                hx-post="/calculate-working-hours" 
+                hx-trigger="input delay:500ms" 
+                hx-target="#work-summary"
+                hx-indicator="#hours-indicator"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="publicHolidays">Public holidays per year</label>
+            <input
+                type="number"
+                id="publicHolidays"
+                name="schedule[publicHolidays]"
+                value="{{ .Schedule.PublicHolidays }}"
+                min="0"
+                hx-post="/calculate-working-hours" 
+                hx-trigger="input delay:500ms" 
+                hx-target="#work-summary"
+                hx-indicator="#hours-indicator"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="educationDays">Education days per year</label>
+            <input
+                type="number"
+                id="educationDays"
+                name="schedule[educationDays]"
+                value="{{ .Schedule.EducationDays }}"
+                min="0"
+                hx-post="/calculate-working-hours" 
+                hx-trigger="input delay:500ms" 
+                hx-target="#work-summary"
+                hx-indicator="#hours-indicator"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="sickDays">Sick days per year</label>
+            <input
+                type="number"
+                id="sickDays"
+                name="schedule[sickDays]"
+                value="{{ .Schedule.SickDays }}"
+                min="0"
+                hx-post="/calculate-working-hours" 
+                hx-trigger="input delay:500ms" 
+                hx-target="#work-summary"
+                hx-indicator="#hours-indicator"
+            />
+        </div>
+        <div id="hours-indicator" class="htmx-indicator">
+            <div class="spinner">Calculating...</div>
+        </div>
+    </div>
+</div>
+{{ end }}

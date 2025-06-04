@@ -1,0 +1,15 @@
+{
+  "ID": "freelancer",
+  "Label": "Freelancer",
+  "Description": "Optimized schedule for independent contractors with flexibility",
+  "UserID": "user_1",
+  "Public": false,
+  "SortOrder": 1,
+  "WorkSchedule": {
+    "HoursPerWeek": 45.0,
+    "VacationDays": 10,
+    "PublicHolidays": 10,
+    "EducationDays": 5,
+    "SickDays": 1
+  }
+}

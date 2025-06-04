@@ -1,0 +1,12 @@
+{{ define "partials/schedule_summary" }}
+<div id="work-summary" class="work-summary">
+    <div class="summary-item">
+        <span class="summary-label">Working days per year:</span>
+        <span class="summary-value">{{ .Schedule.TotalWorkingDays }}</span>
+    </div>
+    <div class="summary-item">
+        <span class="summary-label">Working hours per year:</span>
+        <span class="summary-value">{{ .Schedule.TotalWorkingHours }}</span>
+    </div>
+</div>
+{{ end }}

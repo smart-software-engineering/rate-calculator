@@ -1,0 +1,15 @@
+{
+  "ID": "usa",
+  "Label": "United States",
+  "Description": "Standard work schedule for the United States with federal holidays",
+  "UserID": "system",
+  "Public": true,
+  "SortOrder": 20,
+  "WorkSchedule": {
+    "HoursPerWeek": 40.0,
+    "VacationDays": 10,
+    "PublicHolidays": 11,
+    "EducationDays": 3,
+    "SickDays": 5
+  }
+}

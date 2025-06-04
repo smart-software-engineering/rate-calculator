@@ -1,0 +1,15 @@
+{
+  "ID": "germany",
+  "Label": "Germany",
+  "Description": "Standard work schedule for Germany with legal holidays",
+  "UserID": "system",
+  "Public": true,
+  "SortOrder": 10,
+  "WorkSchedule": {
+    "HoursPerWeek": 40.0,
+    "VacationDays": 24,
+    "PublicHolidays": 9,
+    "EducationDays": 5,
+    "SickDays": 8
+  }
+}

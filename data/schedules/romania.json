@@ -1,0 +1,15 @@
+{
+  "ID": "romania",
+  "Label": "Romania",
+  "Description": "Standard work schedule for Romania with national holidays",
+  "UserID": "system",
+  "Public": true,
+  "SortOrder": 25,
+  "WorkSchedule": {
+    "HoursPerWeek": 40.0,
+    "VacationDays": 21,
+    "PublicHolidays": 12,
+    "EducationDays": 5,
+    "SickDays": 10
+  }
+}
