@@ -3,16 +3,18 @@ package session
 import (
 	"encoding/gob"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/sessions"
 	"github.com/smart-software-engineering/rate-calculator/internal/model"
 )
 
 const (
-	sessionName       = "rate-calculator-session"
-	scheduleKey       = "current_schedule"
-	scheduleIDKey     = "schedule_id"
-	expensesKey       = "expenses"
+	sessionName   = "rate-calculator-session"
+	scheduleKey   = "current_schedule"
+	scheduleIDKey = "schedule_id"
+	expensesKey   = "expenses"
+	userDataKey   = "user_data"
 )
 
 func init() {
@@ -23,6 +25,14 @@ func init() {
 	gob.Register(model.ExpenseCategory{})
 	gob.Register([]model.ExpenseItem{})
 	gob.Register(model.ExpenseItem{})
+
+	gob.Register(&model.UserData{})
+	gob.Register(&model.CalculationResult{})
+	gob.Register(model.CategoryTotal{})
+	gob.Register(map[string]model.CategoryTotal{})
+	gob.Register(map[string]string{})
+	gob.Register([]string{})
+	gob.Register(time.Time{})
 }
 
 type CookieStore struct {
@@ -32,14 +42,13 @@ type CookieStore struct {
 
 func NewCookieStore(authKey []byte, encryptionKey []byte, options *CookieOptions) *CookieStore {
 	var store *sessions.CookieStore
-	
+
 	if encryptionKey != nil {
 		store = sessions.NewCookieStore(authKey, encryptionKey)
 	} else {
 		store = sessions.NewCookieStore(authKey)
 	}
-	
-	// Use provided options or fallback to defaults
+
 	if options == nil {
 		options = &CookieOptions{
 			Path:     "/",
@@ -49,8 +58,7 @@ func NewCookieStore(authKey []byte, encryptionKey []byte, options *CookieOptions
 			SameSite: SameSiteStrictMode,
 		}
 	}
-	
-	// Convert our SameSiteMode to http package SameSite
+
 	var sameSite http.SameSite
 	switch options.SameSite {
 	case SameSiteLaxMode:
@@ -62,7 +70,7 @@ func NewCookieStore(authKey []byte, encryptionKey []byte, options *CookieOptions
 	default:
 		sameSite = http.SameSiteLaxMode
 	}
-	
+
 	store.Options = &sessions.Options{
 		Path:     options.Path,
 		MaxAge:   options.MaxAge,
@@ -189,4 +197,51 @@ func (c *CookieStore) Clear(w http.ResponseWriter, r *http.Request) error {
 
 func (c *CookieStore) GetAuthKey() string {
 	return c.authKey
+}
+
+func (c *CookieStore) GetUserData(r *http.Request) (*model.UserData, error) {
+	session, err := c.getSession(r)
+	if err != nil {
+		return nil, err
+	}
+
+	val, ok := session.Values[userDataKey]
+	if !ok {
+		return nil, nil
+	}
+
+	userData, ok := val.(*model.UserData)
+	if !ok {
+		return nil, nil
+	}
+
+	return userData, nil
+}
+
+func (c *CookieStore) SetUserData(w http.ResponseWriter, r *http.Request, userData *model.UserData) error {
+	session, err := c.getSession(r)
+	if err != nil {
+		return err
+	}
+
+	session.Values[userDataKey] = userData
+	return session.Save(r, w)
+}
+
+func (c *CookieStore) GetOrCreateUserData(w http.ResponseWriter, r *http.Request) (*model.UserData, error) {
+	userData, err := c.GetUserData(r)
+	if err != nil {
+		return nil, err
+	}
+
+	if userData == nil {
+		userData = model.NewUserDataWithDefaults()
+
+		err = c.SetUserData(w, r, userData)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return userData, nil
 }

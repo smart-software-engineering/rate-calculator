@@ -8,12 +8,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gorilla/csrf"
-	"github.com/smart-software-engineering/rate-calculator/internal/calculator"
 	"github.com/smart-software-engineering/rate-calculator/internal/model"
+	"github.com/smart-software-engineering/rate-calculator/internal/service"
 	"github.com/smart-software-engineering/rate-calculator/internal/session"
 	"github.com/smart-software-engineering/rate-calculator/internal/storage"
-	"github.com/smart-software-engineering/rate-calculator/internal/template"
+	tmpl "github.com/smart-software-engineering/rate-calculator/internal/template"
 )
 
 //go:embed static
@@ -25,30 +24,28 @@ type ServerOptions struct {
 
 type Server struct {
 	Addr            string
-	Template        template.Manager
+	Template        tmpl.Manager
 	ScheduleStorage storage.ScheduleStorage
 	SessionStore    session.Store
-	CSRFKey         []byte
+	UserDataService *service.UserDataService
 	Options         *ServerOptions
 }
 
-func New(addr string, tm template.Manager, ss storage.ScheduleStorage, sessionStore session.Store, options *ServerOptions) *Server {
-	// Use the same key as the session for simplicity
-	csrfKey := []byte(sessionStore.GetAuthKey())
-
-	// Default options if none provided
+func New(addr string, tm tmpl.Manager, ss storage.ScheduleStorage, sessionStore session.Store, options *ServerOptions) *Server {
 	if options == nil {
 		options = &ServerOptions{
 			DevMode: false,
 		}
 	}
 
+	userDataService := service.NewUserDataService(sessionStore, ss)
+
 	return &Server{
 		Addr:            addr,
 		Template:        tm,
 		ScheduleStorage: ss,
 		SessionStore:    sessionStore,
-		CSRFKey:         csrfKey,
+		UserDataService: userDataService,
 		Options:         options,
 	}
 }
@@ -56,45 +53,16 @@ func New(addr string, tm template.Manager, ss storage.ScheduleStorage, sessionSt
 func (s *Server) Start() error {
 	mux := http.NewServeMux()
 
-	// Setup CSRF protection with environment-appropriate settings
-	csrfOptions := []csrf.Option{
-		csrf.Path("/"),
-		csrf.RequestHeader("X-CSRF-Token"),
-		csrf.FieldName("gorilla.csrf.Token"),
-	}
-
-	// Configure security options based on environment
-	if s.Options.DevMode {
-		// Development mode - less secure but more convenient
-		csrfOptions = append(csrfOptions,
-			csrf.Secure(false),
-			csrf.SameSite(csrf.SameSiteLaxMode),
-		)
-		log.Println("Warning: Running in development mode with reduced security settings")
-	} else {
-		// Production mode - more secure
-		csrfOptions = append(csrfOptions,
-			csrf.Secure(true),
-			csrf.SameSite(csrf.SameSiteStrictMode),
-		)
-	}
-
-	// CSRF := csrf.Protect(s.CSRFKey, csrfOptions...)
-
 	staticFS, err := fs.Sub(staticFiles, "static")
 	if err != nil {
 		return err
 	}
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		var expenses *model.ExpenseModel
-
-		sessionExpenses, err := s.SessionStore.GetExpenses(r)
-		if err != nil || sessionExpenses == nil {
-			expenses = model.CreateSampleExpenseModel()
-			s.SessionStore.SetExpenses(w, r, expenses)
-		} else {
-			expenses = sessionExpenses
+		userData, err := s.UserDataService.GetOrCreateUserData(w, r)
+		if err != nil {
+			http.Error(w, "Failed to get user data: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		allSchedules, err := s.ScheduleStorage.GetSchedules()
@@ -110,49 +78,30 @@ func (s *Server) Start() error {
 			}
 		}
 
-		var activeSchedule *model.WorkScheduleTemplate
-		var schedule *model.WorkSchedule
+		expenseCategories := s.prepareExpenseCategoriesFromUserData(userData)
 
-		sessionScheduleID, err := s.SessionStore.GetScheduleID(r)
-		if err == nil && sessionScheduleID != "" {
-			for _, s := range schedules {
-				if s.ID == sessionScheduleID {
-					activeSchedule = s
-					break
-				}
-			}
-		}
-
-		if activeSchedule == nil && len(schedules) > 0 {
-			activeSchedule = schedules[0]
-		}
-
-		sessionSchedule, err := s.SessionStore.GetSchedule(r)
-		if err != nil || sessionSchedule == nil {
-			schedule = activeSchedule.WorkSchedule
-			s.SessionStore.SetSchedule(w, r, schedule)
+		var calcResults *model.CalculationResult
+		if userData.LastCalculation != nil {
+			calcResults = userData.LastCalculation
 		} else {
-			schedule = sessionSchedule
+			userData, err = s.UserDataService.UpdateExpenseValues(w, r, userData.ExpenseModel)
+			if err != nil {
+				http.Error(w, "Failed to calculate rates: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+			calcResults = userData.LastCalculation
 		}
 
-		if sessionScheduleID == "" || sessionScheduleID != activeSchedule.ID {
-			s.SessionStore.SetScheduleID(w, r, activeSchedule.ID)
-		}
-
-		// Calculate initial rates
-		results := calculator.CalculateRates(expenses, schedule)
-
-		data := template.TemplateData{
-			"Expenses":               expenses,
-			"Schedule":               schedule,
-			"ScheduleID":             activeSchedule.ID,
-			"ScheduleLabel":          activeSchedule.Label,
+		data := tmpl.TemplateData{
+			"Expenses":               userData.ExpenseModel,
+			"ExpenseCategories":      expenseCategories,
+			"Schedule":               userData.Schedule,
+			"ScheduleID":             userData.ActiveScheduleID,
+			"ScheduleLabel":          userData.ScheduleTemplate,
 			"Schedules":              schedules,
-			"TotalYearlyExpenses":    results.TotalYearlyExpenses,
-			"YearlyTotalWithPercent": results.YearlyTotalWithPercent,
-			"HourlyRate":             results.HourlyRate,
-			"CSRFToken":              csrf.Token(r),
-			"CSRFField":              csrf.TemplateField(r),
+			"TotalYearlyExpenses":    calcResults.TotalYearlyExpenses,
+			"YearlyTotalWithPercent": calcResults.YearlyTotalWithPercent,
+			"HourlyRate":             calcResults.HourlyRate,
 		}
 
 		if err := s.Template.Render(w, "index.html", data); err != nil {
@@ -174,42 +123,19 @@ func (s *Server) Start() error {
 			return
 		}
 
-		log.Printf("Schedule selection: ID=%s, CSRF Token present: %v", id, r.Header.Get("X-CSRF-Token") != "")
-
-		schedule, err := s.ScheduleStorage.GetScheduleByID(id)
+		userData, err := s.UserDataService.UpdateScheduleFromTemplate(w, r, id)
 		if err != nil {
-			http.Error(w, "Schedule not found: "+err.Error(), http.StatusNotFound)
+			http.Error(w, "Failed to update schedule: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		if !schedule.Public && schedule.UserID != "system" {
-			http.Error(w, "Schedule not available", http.StatusForbidden)
-			return
-		}
-
-		schedule.WorkSchedule.CalculateWorkingTime()
-
-		s.SessionStore.SetSchedule(w, r, schedule.WorkSchedule)
-		s.SessionStore.SetScheduleID(w, r, schedule.ID)
-
-		// Get current expenses for rate calculation
-		expenses, _ := s.SessionStore.GetExpenses(r)
-		if expenses == nil {
-			expenses = model.CreateSampleExpenseModel()
-		}
-
-		// Calculate rates with the selected schedule
-		results := calculator.CalculateRates(expenses, schedule.WorkSchedule)
-
-		data := template.TemplateData{
-			"Schedule":               schedule.WorkSchedule,
-			"ScheduleLabel":          schedule.Label,
-			"Expenses":               expenses,
-			"TotalYearlyExpenses":    results.TotalYearlyExpenses,
-			"YearlyTotalWithPercent": results.YearlyTotalWithPercent,
-			"HourlyRate":             results.HourlyRate,
-			"CSRFToken":              csrf.Token(r),
-			"CSRFField":              csrf.TemplateField(r),
+		data := tmpl.TemplateData{
+			"Schedule":               userData.Schedule,
+			"ScheduleLabel":          userData.ScheduleTemplate,
+			"Expenses":               userData.ExpenseModel,
+			"TotalYearlyExpenses":    userData.LastCalculation.TotalYearlyExpenses,
+			"YearlyTotalWithPercent": userData.LastCalculation.YearlyTotalWithPercent,
+			"HourlyRate":             userData.LastCalculation.HourlyRate,
 		}
 
 		if err := s.Template.Render(w, "partials/schedule_form", data); err != nil {
@@ -225,11 +151,13 @@ func (s *Server) Start() error {
 			return
 		}
 
-		schedule, err := s.SessionStore.GetSchedule(r)
-		if err != nil || schedule == nil {
-			schedule = model.NewWorkSchedule()
+		userData, err := s.UserDataService.GetOrCreateUserData(w, r)
+		if err != nil {
+			http.Error(w, "Failed to get user data: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 
+		schedule := userData.Schedule
 		for key, values := range r.Form {
 			if len(values) == 0 {
 				continue
@@ -264,33 +192,23 @@ func (s *Server) Start() error {
 			}
 		}
 
-		schedule.CalculateWorkingTime()
-		s.SessionStore.SetSchedule(w, r, schedule)
-
-		currentScheduleID, _ := s.SessionStore.GetScheduleID(r)
-
-		// Get current expenses for rate calculation
-		expenses, _ := s.SessionStore.GetExpenses(r)
-		if expenses == nil {
-			expenses = model.CreateSampleExpenseModel()
+		userData, err = s.UserDataService.UpdateScheduleValues(w, r, schedule)
+		if err != nil {
+			http.Error(w, "Failed to update schedule: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		// Calculate rates with the updated schedule
-		results := calculator.CalculateRates(expenses, schedule)
-
-		data := template.TemplateData{
-			"Schedule":               schedule,
-			"ScheduleLabel":          "Custom",
-			"ScheduleID":             currentScheduleID,
-			"Expenses":               expenses,
-			"TotalYearlyExpenses":    results.TotalYearlyExpenses,
-			"YearlyTotalWithPercent": results.YearlyTotalWithPercent,
-			"HourlyRate":             results.HourlyRate,
-			"CSRFToken":              csrf.Token(r),
-			"CSRFField":              csrf.TemplateField(r),
+		data := tmpl.TemplateData{
+			"Schedule":               userData.Schedule,
+			"ScheduleLabel":          userData.ScheduleTemplate,
+			"ScheduleID":             userData.ActiveScheduleID,
+			"Expenses":               userData.ExpenseModel,
+			"TotalYearlyExpenses":    userData.LastCalculation.TotalYearlyExpenses,
+			"YearlyTotalWithPercent": userData.LastCalculation.YearlyTotalWithPercent,
+			"HourlyRate":             userData.LastCalculation.HourlyRate,
 		}
 
-		if err := s.Template.Render(w, "partials/schedule_summary", data); err != nil {
+		if err := s.Template.Render(w, "partials/schedule_form", data); err != nil {
 			http.Error(w, "Failed to render template: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -303,43 +221,65 @@ func (s *Server) Start() error {
 			return
 		}
 
-		expenses, err := s.SessionStore.GetExpenses(r)
-		if err != nil || expenses == nil {
-			expenses = model.CreateSampleExpenseModel()
+		userData, err := s.UserDataService.GetOrCreateUserData(w, r)
+		if err != nil {
+			http.Error(w, "Failed to get user data: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		updatedExpenses := updateExpensesFromForm(expenses, r.Form)
-		s.SessionStore.SetExpenses(w, r, updatedExpenses)
+		updatedExpenses := updateExpensesFromForm(userData.ExpenseModel, r.Form)
 
-		// Get the current work schedule
-		schedule, err := s.SessionStore.GetSchedule(r)
-		if err != nil || schedule == nil {
-			// Get the default schedule if none exists
-			scheduleID, _ := s.SessionStore.GetScheduleID(r)
-			defaultSchedule, err := s.ScheduleStorage.GetScheduleByID(scheduleID)
-			if err != nil || defaultSchedule == nil {
-				// Use a basic default if nothing else is available
-				schedule = model.NewWorkSchedule()
-			} else {
-				schedule = defaultSchedule.WorkSchedule
-			}
+		userData, err = s.UserDataService.UpdateExpenseValues(w, r, updatedExpenses)
+		if err != nil {
+			http.Error(w, "Failed to calculate rates: "+err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		// Calculate the results
-		results := calculator.CalculateRates(updatedExpenses, schedule)
-
-		// Prepare data for the template
-		data := template.TemplateData{
-			"Expenses":               updatedExpenses,
-			"Schedule":               schedule,
-			"TotalYearlyExpenses":    results.TotalYearlyExpenses,
-			"YearlyTotalWithPercent": results.YearlyTotalWithPercent,
-			"HourlyRate":             results.HourlyRate,
-			"CSRFToken":              csrf.Token(r),
-			"CSRFField":              csrf.TemplateField(r),
+		data := tmpl.TemplateData{
+			"Expenses":               userData.ExpenseModel,
+			"Schedule":               userData.Schedule,
+			"TotalYearlyExpenses":    userData.LastCalculation.TotalYearlyExpenses,
+			"YearlyTotalWithPercent": userData.LastCalculation.YearlyTotalWithPercent,
+			"HourlyRate":             userData.LastCalculation.HourlyRate,
 		}
 
-		// Render just the calculation result template
+		if err := s.Template.Render(w, "partials/calculation_result", data); err != nil {
+			http.Error(w, "Failed to render template: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
+
+	mux.HandleFunc("POST /update-category", func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		userData, err := s.UserDataService.GetOrCreateUserData(w, r)
+		if err != nil {
+			http.Error(w, "Failed to get user data: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		updatedExpenses := updateExpensesFromForm(userData.ExpenseModel, r.Form)
+
+		userData, err = s.UserDataService.UpdateExpenseValues(w, r, updatedExpenses)
+		if err != nil {
+			http.Error(w, "Failed to update expenses: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/html")
+
+		data := tmpl.TemplateData{
+			"Expenses":               userData.ExpenseModel,
+			"Schedule":               userData.Schedule,
+			"TotalYearlyExpenses":    userData.LastCalculation.TotalYearlyExpenses,
+			"YearlyTotalWithPercent": userData.LastCalculation.YearlyTotalWithPercent,
+			"HourlyRate":             userData.LastCalculation.HourlyRate,
+		}
+
 		if err := s.Template.Render(w, "partials/calculation_result", data); err != nil {
 			http.Error(w, "Failed to render template: "+err.Error(), http.StatusInternalServerError)
 			return
@@ -354,13 +294,8 @@ func (s *Server) Start() error {
 	fileServer := http.FileServer(http.FS(staticFS))
 	mux.Handle("GET /app/", http.StripPrefix("/app/", fileServer))
 
-	// Create a middleware chain
 	var handler http.Handler = mux
 
-	// Add CSRF protection
-	// handler = CSRF(handler)
-
-	// Create server with the middleware chain
 	server := &http.Server{
 		Addr:    s.Addr,
 		Handler: handler,
@@ -372,6 +307,22 @@ func (s *Server) Start() error {
 }
 
 func updateExpensesFromForm(expenses *model.ExpenseModel, form map[string][]string) *model.ExpenseModel {
+	updatedExpenses := &model.ExpenseModel{
+		Categories: make([]model.ExpenseCategory, len(expenses.Categories)),
+	}
+
+	for i, category := range expenses.Categories {
+		updatedExpenses.Categories[i] = model.ExpenseCategory{
+			ID:    category.ID,
+			Label: category.Label,
+			Items: make([]model.ExpenseItem, len(category.Items)),
+		}
+		copy(updatedExpenses.Categories[i].Items, category.Items)
+	}
+
+	// Track items that need to be created
+	itemsToCreate := make(map[string]map[string]interface{}) // itemID -> {amount, type, label}
+
 	for key, values := range form {
 		if !strings.HasPrefix(key, "expense[") || !strings.HasSuffix(key, "]") || len(values) == 0 {
 			continue
@@ -382,31 +333,187 @@ func updateExpensesFromForm(expenses *model.ExpenseModel, form map[string][]stri
 			continue
 		}
 
-		expenseName := parts[0][len("expense["):]
+		expenseID := parts[0][len("expense["):]
 		paramType := parts[1][:len(parts[1])-1]
 		value := values[0]
 
-		for categoryIdx, category := range expenses.Categories {
+		found := false
+		for categoryIdx, category := range updatedExpenses.Categories {
 			for itemIdx, item := range category.Items {
-				if item.Label == expenseName {
+				if item.ID == expenseID {
 					if paramType == "amount" {
-						if amount, err := strconv.Atoi(value); err == nil {
-							expenses.Categories[categoryIdx].Items[itemIdx].Amount = amount
+						if amount, err := strconv.Atoi(value); err == nil && amount >= 0 {
+							updatedExpenses.Categories[categoryIdx].Items[itemIdx].Amount = amount
+							found = true
+						} else {
+							log.Printf("Invalid amount value for item ID %s: %s (error: %v)", expenseID, value, err)
 						}
 					} else if paramType == "type" {
 						switch value {
 						case "monthly":
-							expenses.Categories[categoryIdx].Items[itemIdx].Type = model.Monthly
+							updatedExpenses.Categories[categoryIdx].Items[itemIdx].Type = model.Monthly
+							found = true
 						case "yearly":
-							expenses.Categories[categoryIdx].Items[itemIdx].Type = model.Yearly
+							updatedExpenses.Categories[categoryIdx].Items[itemIdx].Type = model.Yearly
+							found = true
 						case "percentage":
-							expenses.Categories[categoryIdx].Items[itemIdx].Type = model.Percentage
+							updatedExpenses.Categories[categoryIdx].Items[itemIdx].Type = model.Percentage
+							found = true
 						}
+					} else if paramType == "label" {
+						updatedExpenses.Categories[categoryIdx].Items[itemIdx].Label = value
+						found = true
 					}
+					break
 				}
+			}
+			if found {
+				break
+			}
+		}
+
+		if !found {
+			// Item doesn't exist, prepare to create it
+			if itemsToCreate[expenseID] == nil {
+				itemsToCreate[expenseID] = make(map[string]interface{})
+			}
+
+			if paramType == "amount" {
+				if amount, err := strconv.Atoi(value); err == nil && amount >= 0 {
+					itemsToCreate[expenseID]["amount"] = amount
+				}
+			} else if paramType == "type" {
+				switch value {
+				case "monthly":
+					itemsToCreate[expenseID]["type"] = model.Monthly
+				case "yearly":
+					itemsToCreate[expenseID]["type"] = model.Yearly
+				case "percentage":
+					itemsToCreate[expenseID]["type"] = model.Percentage
+				}
+			} else if paramType == "label" {
+				itemsToCreate[expenseID]["label"] = value
+			}
+
+			log.Printf("Expense item not found, will attempt to create with ID: %s", expenseID)
+		}
+	}
+
+	// Create missing items in appropriate categories
+	for itemID, params := range itemsToCreate {
+		// Only create if we have both amount and type
+		amount, hasAmount := params["amount"].(int)
+		expenseType, hasType := params["type"].(model.ExpenseType)
+		label, hasLabel := params["label"].(string)
+
+		// Use itemID as label if no label provided
+		if !hasLabel || label == "" {
+			label = "New Item " + itemID[:8] // Use first 8 chars of ID as fallback
+		}
+
+		if hasAmount && hasType {
+			// Determine which category to add it to based on item label patterns
+			categoryIndex := determineCategoryForItem(label)
+
+			if categoryIndex < len(updatedExpenses.Categories) {
+				newItem := model.ExpenseItem{
+					ID:     itemID,
+					Label:  label,
+					Amount: amount,
+					Type:   expenseType,
+				}
+
+				updatedExpenses.Categories[categoryIndex].Items = append(
+					updatedExpenses.Categories[categoryIndex].Items,
+					newItem,
+				)
+
+				log.Printf("Created new expense item: %s (ID: %s) in category: %s",
+					label, itemID, updatedExpenses.Categories[categoryIndex].Label)
+			} else {
+				log.Printf("Could not determine category for new item: %s (ID: %s)", label, itemID)
 			}
 		}
 	}
 
-	return expenses
+	return updatedExpenses
+}
+
+// determineCategoryForItem suggests which category a new expense item should belong to
+func determineCategoryForItem(itemName string) int {
+	itemLower := strings.ToLower(itemName)
+
+	// Professional Expenses (index 1 in sample model)
+	professionalKeywords := []string{
+		"insurance", "software", "hardware", "office", "communication",
+		"training", "education", "mobility", "ads", "advertising",
+		"fees", "donation", "business", "professional", "equipment",
+	}
+
+	// Private Expenses (index 0 in sample model)
+	privateKeywords := []string{
+		"rent", "household", "utilities", "groceries", "clothing",
+		"internet", "phone", "personal", "private", "home",
+	}
+
+	// Financial Goals (index 2 in sample model)
+	financialKeywords := []string{
+		"savings", "retirement", "emergency", "investment", "fund",
+	}
+
+	// Taxes (index 3 in sample model)
+	taxKeywords := []string{
+		"tax", "pension", "health", "social", "vat", "income",
+	}
+
+	for _, keyword := range professionalKeywords {
+		if strings.Contains(itemLower, keyword) {
+			return 1 // Professional Expenses
+		}
+	}
+
+	for _, keyword := range financialKeywords {
+		if strings.Contains(itemLower, keyword) {
+			return 2 // Financial Goals
+		}
+	}
+
+	for _, keyword := range taxKeywords {
+		if strings.Contains(itemLower, keyword) {
+			return 3 // Taxes
+		}
+	}
+
+	for _, keyword := range privateKeywords {
+		if strings.Contains(itemLower, keyword) {
+			return 0 // Private Expenses
+		}
+	}
+
+	// Default to Professional Expenses if unsure
+	return 1
+}
+
+func (s *Server) prepareExpenseCategoriesFromUserData(userData *model.UserData) []model.ExpenseCategoryData {
+	var categories []model.ExpenseCategoryData
+
+	for _, category := range userData.ExpenseModel.Categories {
+		var percentageTotal int
+		var yearlyTotal int
+
+		if userData.LastCalculation != nil && userData.LastCalculation.CategoryTotals != nil {
+			if totals, exists := userData.LastCalculation.CategoryTotals[category.Label]; exists {
+				percentageTotal = totals.PercentageTotal
+				yearlyTotal = totals.YearlyTotal
+			}
+		}
+
+		categories = append(categories, model.ExpenseCategoryData{
+			Category:        category,
+			PercentageTotal: percentageTotal,
+			YearlyTotal:     yearlyTotal,
+		})
+	}
+
+	return categories
 }

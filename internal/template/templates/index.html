@@ -7,16 +7,15 @@
         <link rel="stylesheet" href="/app/css/app.css" />
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     </head>
-    <body hx-headers='{"X-CSRF-Token": "{{ .CSRFToken }}"}'>
+    <body>
         <div class="container">
             <header>
                 <h1>Freelancer Hourly Rate Calculator</h1>
             </header>
             <main>
-                <form hx-post="/calculate" hx-target="#result" hx-indicator="#loading">
-                    {{ .CSRFField }}
-                    <div class="calculator">
-                        <div class="calculator-section">
+                <div class="main-layout">
+                    <div class="forms-section">
+                        <div class="schedule-card">
                             <div class="section-header">
                                 <h2>Work Schedule</h2>
                                 <div class="schedule-selector">
@@ -28,6 +27,7 @@
                                         hx-indicator="#schedule-loading"
                                         hx-trigger="change"
                                         hx-include="this"
+                                        hx-swap="outerHTML settle:100ms"
                                     >
                                         {{ range .Schedules }}
                                         <option value="{{ .ID }}" {{ if eq .ID $.ScheduleID }}selected{{ end }}>
@@ -40,84 +40,44 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="work-schedule">
-                                {{ template "partials/schedule_form" . }}
-                            </div>
+                            {{ template "partials/schedule_form" . }}
                         </div>
 
-                        <div class="calculator-section">
-                            {{ range .Expenses.Categories }}
-                            <div class="expense-category">
-                                <h2>{{ .Label }}</h2>
-                                <div class="category-items">
-                                    {{ range .Items }}
-                                    <div class="expense-item">
-                                        <div class="form-group">
-                                            <label>{{ .Label }}</label>
-                                            <div class="input-group">
-                                                {{ if eq .Type "percentage" }}
-                                                <div class="slider-container">
-                                                    <input
-                                                                type="range"
-                                                                name="expense[{{ .Label }}][amount]"
-                                                                value="{{ .Amount }}"
-                                                                min="0"
-                                                                max="100"
-                                                                step="1"
-                                                                class="percentage-slider"
-                                                                hx-trigger="change"
-                                                                hx-post="/calculate"
-                                                                hx-target="#result"
-                                                                hx-include="closest form"
-                                                    >
-                                                    <div class="slider-value">{{ .Amount }}%</div>
-                                                </div>
-                                                <input type="hidden" name="expense[{{ .Label }}][type]" value="percentage">
-                                                {{ else }}
-                                                <input
-                                                    type="number"
-                                                    name="expense[{{ .Label }}][amount]"
-                                                    value="{{ .Amount }}"
-                                                    min="0"
-                                                    step="0.01"
-                                                    hx-trigger="change delay:500ms"
-                                                    hx-post="/calculate"
-                                                    hx-target="#result"
-                                                    hx-include="closest form"
-                                                />
-                                                <select
-                                                    name="expense[{{ .Label }}][type]"
-                                                    hx-trigger="change"
-                                                    hx-post="/calculate"
-                                                    hx-target="#result"
-                                                >
-                                                    <option value="monthly" {{ if eq .Type "monthly" }}selected{{ end }}>Monthly</option>
-                                                    <option value="yearly" {{ if eq .Type "yearly" }}selected{{ end }}>Yearly</option>
-                                                </select>
-                                                {{ end }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{ end }}
-                                </div>
+                        <div class="calculator">
+                            <div class="calculator-section">
+                                <h2>Expense Categories</h2>
+                                {{ range .ExpenseCategories }}
+                                {{ template "partials/expense_category" . }}
+                                {{ end }}
                             </div>
-                            {{ end }}
-                        </div>
 
-                        <button id="calculate" type="submit">Calculate Rate</button>
-                        <div id="loading" class="htmx-indicator">
-                            <div class="spinner">Calculating...</div>
+                            <button id="calculate" type="button" hx-post="/calculate" hx-target="#result" hx-include="[name^='expense[']">Calculate Rate</button>
+                            <div id="loading" class="htmx-indicator">
+                                <div class="spinner">Calculating...</div>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="results-section">
                         <div class="result" id="result">
                             {{ template "partials/calculation_result" . }}
                         </div>
                     </div>
-                </form>
+                </div>
             </main>
             <footer>
                 <p>&copy; 2023 Smart Software Engineering SRL</p>
             </footer>
         </div>
         <script src="/app/js/app.js"></script>
+        <script>
+            function toggleCategory(categoryID) {
+                const form = document.getElementById('category-' + categoryID);
+                const indicator = form.previousElementSibling.querySelector('.toggle-indicator');
+                
+                form.classList.toggle('hidden');
+                indicator.textContent = form.classList.contains('hidden') ? '▼' : '▲';
+            }
+        </script>
     </body>
 </html>

@@ -16,7 +16,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -36,7 +36,6 @@ header h1 {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 30px;
-    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -61,20 +60,81 @@ header h1 {
     color: #2c3e50;
     font-size: 1.8rem;
     padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
     display: inline-block;
 }
 
-.expense-category {
-    margin-bottom: 30px;
+.calculator-section h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
 }
 
-.expense-category h3 {
+.expense-category {
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.category-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.category-header:hover {
+    background-color: #e9ecef;
+}
+
+.category-header h3 {
     color: #2c3e50;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #eee;
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.category-summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.category-percentage {
+    font-weight: bold;
+    color: #e67e22;
+    font-size: 1rem;
+    background-color: #fdf2e9;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid #f39c12;
+}
+
+.category-total {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 1.1rem;
+}
+
+.toggle-indicator {
+    font-size: 0.9rem;
+    color: #666;
+    transition: transform 0.2s;
+}
+
+.category-form {
+    padding: 20px;
+    background-color: white;
+}
+
+.category-form.hidden {
+    display: none;
 }
 
 .category-items {
@@ -219,12 +279,18 @@ select:focus {
 
 .time-parameters {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 15px;
     background-color: #f8f9fa;
     border-radius: 6px;
     padding: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+.time-parameters .form-group:last-child {
+    grid-column: 2;
 }
 
 .work-summary {
@@ -520,6 +586,11 @@ footer {
 @media (max-width: 768px) {
     .calculator {
         padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .schedule-card {
+        padding: 20px;
     }
 
     header h1 {
@@ -531,6 +602,12 @@ footer {
         align-items: flex-start;
         gap: 15px;
     }
+    
+    .schedule-card .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
 
     .category-items {
         grid-template-columns: 1fr;
@@ -538,5 +615,79 @@ footer {
 
     .time-parameters {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
     }
+    
+    .time-parameters .form-group:last-child {
+        grid-column: 1;
+    }
+
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .results-section {
+        position: static;
+        order: -1;
+    }
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr 450px;
+        gap: 30px;
+    }
+}
+
+.forms-section {
+    min-width: 0;
+}
+
+.results-section {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.results-section .result {
+    margin-top: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.schedule-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.schedule-card .section-header {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.schedule-card h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.schedule-card .schedule-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

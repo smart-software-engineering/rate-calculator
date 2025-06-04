@@ -8,6 +8,7 @@ import (
 	"math"
 	"net/http"
 	"reflect"
+	"strings"
 )
 
 //go:embed templates/*.html templates/partials/*.html
@@ -17,6 +18,7 @@ type TemplateData map[string]any
 
 type Manager interface {
 	Render(w http.ResponseWriter, name string, data TemplateData) error
+	RenderToString(name string, data TemplateData) (string, error)
 }
 
 type TemplateManager struct {
@@ -51,6 +53,9 @@ func NewManager() (*TemplateManager, error) {
 		"round": func(num any) float64 {
 			return math.Round(toFloat(num)*100) / 100
 		},
+		"replace": func(input, old, new string) string {
+			return strings.Replace(input, old, new, -1)
+		},
 	})
 
 	log.Println("Parsing templates from root and partials directories")
@@ -75,6 +80,17 @@ func (tm *TemplateManager) Render(w http.ResponseWriter, name string, data Templ
 		log.Printf("Error rendering template %s: %v", name, err)
 	}
 	return err
+}
+
+func (tm *TemplateManager) RenderToString(name string, data TemplateData) (string, error) {
+	var buf strings.Builder
+	log.Printf("Rendering template to string: %s", name)
+	err := tm.templates.ExecuteTemplate(&buf, name, data)
+	if err != nil {
+		log.Printf("Error rendering template to string %s: %v", name, err)
+		return "", err
+	}
+	return buf.String(), nil
 }
 
 func toFloat(val any) float64 {

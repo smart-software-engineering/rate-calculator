@@ -1,5 +1,7 @@
 package model
 
+import "github.com/google/uuid"
+
 type ExpenseType string
 
 const (
@@ -9,18 +11,27 @@ const (
 )
 
 type ExpenseItem struct {
-	Label  string
-	Amount int
-	Type   ExpenseType
+	ID     string      `json:"id"`
+	Label  string      `json:"label"`
+	Amount int         `json:"amount"`
+	Type   ExpenseType `json:"type"`
 }
 
 type ExpenseCategory struct {
-	Label string
-	Items []ExpenseItem
+	ID    string        `json:"id"`
+	Label string        `json:"label"`
+	Items []ExpenseItem `json:"items"`
 }
 
 type ExpenseModel struct {
-	Categories []ExpenseCategory
+	Categories []ExpenseCategory `json:"categories"`
+}
+
+type ExpenseCategoryData struct {
+	Category        ExpenseCategory
+	PercentageTotal int
+	YearlyTotal     int
+	CSRFField       interface{}
 }
 
 func NewExpenseModel() *ExpenseModel {
@@ -39,55 +50,66 @@ func (m *ExpenseModel) AddItemToCategory(categoryIndex int, item ExpenseItem) {
 	}
 }
 
+// NewExpenseItem creates a new expense item with generated ID
+func NewExpenseItem(label string, amount int, expenseType ExpenseType) ExpenseItem {
+	return ExpenseItem{
+		ID:     uuid.New().String(),
+		Label:  label,
+		Amount: amount,
+		Type:   expenseType,
+	}
+}
+
+// NewExpenseCategory creates a new expense category with generated ID
+func NewExpenseCategory(label string) ExpenseCategory {
+	return ExpenseCategory{
+		ID:    uuid.New().String(),
+		Label: label,
+		Items: []ExpenseItem{},
+	}
+}
+
 func CreateSampleExpenseModel() *ExpenseModel {
 	expenses := NewExpenseModel()
 
-	privateExpenses := ExpenseCategory{
-		Label: "Private Expenses",
-		Items: []ExpenseItem{
-			{Label: "Rent + Household ", Amount: 3000, Type: Monthly},
-			{Label: "Utilities", Amount: 200, Type: Monthly},
-			{Label: "Groceries", Amount: 400, Type: Monthly},
-			{Label: "Clothing", Amount: 250, Type: Monthly},
-			{Label: "Internet + Phone", Amount: 70, Type: Monthly},
-			{Label: "Mobility", Amount: 70, Type: Monthly},
-			{Label: "Diverse", Amount: 50, Type: Monthly},
-		},
+	privateExpenses := NewExpenseCategory("Private Expenses")
+	privateExpenses.Items = []ExpenseItem{
+		NewExpenseItem("Rent + Household", 3000, Monthly),
+		NewExpenseItem("Utilities", 200, Monthly),
+		NewExpenseItem("Groceries", 400, Monthly),
+		NewExpenseItem("Clothing", 250, Monthly),
+		NewExpenseItem("Internet + Phone", 70, Monthly),
+		NewExpenseItem("Mobility", 70, Monthly),
+		NewExpenseItem("Diverse", 50, Monthly),
 	}
 	expenses.AddCategory(privateExpenses)
 
-	professionalExpenses := ExpenseCategory{
-		Label: "Professional Expenses",
-		Items: []ExpenseItem{
-			{Label: "Office", Amount: 200, Type: Monthly},
-			{Label: "Software + Hardware", Amount: 100, Type: Monthly},
-			{Label: "Communication", Amount: 100, Type: Yearly},
-			{Label: "Insurances", Amount: 100, Type: Monthly},
-			{Label: "Fees, Donations", Amount: 50, Type: Yearly},
-			{Label: "Training & Education", Amount: 200, Type: Yearly},
-			{Label: "Mobility", Amount: 1000, Type: Yearly},
-			{Label: "Ads", Amount: 250, Type: Yearly},
-		},
+	professionalExpenses := NewExpenseCategory("Professional Expenses")
+	professionalExpenses.Items = []ExpenseItem{
+		NewExpenseItem("Office", 200, Monthly),
+		NewExpenseItem("Software + Hardware", 100, Monthly),
+		NewExpenseItem("Communication", 100, Yearly),
+		NewExpenseItem("Insurances", 100, Monthly),
+		NewExpenseItem("Fees, Donations", 50, Yearly),
+		NewExpenseItem("Training & Education", 200, Yearly),
+		NewExpenseItem("Mobility", 1000, Yearly),
+		NewExpenseItem("Ads", 250, Yearly),
 	}
 	expenses.AddCategory(professionalExpenses)
 
-	financialGoals := ExpenseCategory{
-		Label: "Financial Goals",
-		Items: []ExpenseItem{
-			{Label: "Savings", Amount: 20, Type: Percentage},
-			{Label: "Retirement Fund", Amount: 15, Type: Percentage},
-			{Label: "Emergency Fund", Amount: 10, Type: Percentage},
-		},
+	financialGoals := NewExpenseCategory("Financial Goals")
+	financialGoals.Items = []ExpenseItem{
+		NewExpenseItem("Savings", 20, Percentage),
+		NewExpenseItem("Retirement Fund", 15, Percentage),
+		NewExpenseItem("Emergency Fund", 10, Percentage),
 	}
 	expenses.AddCategory(financialGoals)
 
-	taxes := ExpenseCategory{
-		Label: "Taxes",
-		Items: []ExpenseItem{
-			{Label: "Pension", Amount: 25, Type: Percentage},
-			{Label: "Health Insurance", Amount: 10, Type: Percentage},
-			{Label: "Income Tax", Amount: 10, Type: Percentage},
-		},
+	taxes := NewExpenseCategory("Taxes")
+	taxes.Items = []ExpenseItem{
+		NewExpenseItem("Pension", 25, Percentage),
+		NewExpenseItem("Health Insurance", 10, Percentage),
+		NewExpenseItem("Income Tax", 10, Percentage),
 	}
 	expenses.AddCategory(taxes)
 
