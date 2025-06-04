@@ -3,81 +3,245 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Freelancer Hourly Rate Calculator</title>
-        <link rel="stylesheet" href="/app/css/app.css" />
-        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <title>Freelance Rate Calculator - Calculate Your Perfect Rate</title>
+        <style>
+            /* Landing page specific styles */
+            .hero {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 4rem 2rem;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+            
+            .hero p {
+                font-size: 1.25rem;
+                margin-bottom: 2rem;
+                opacity: 0.9;
+            }
+            
+            .cta-button {
+                background: #ff6b6b;
+                color: white;
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+                border: none;
+                border-radius: 50px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            }
+            
+            .cta-button:hover {
+                background: #ff5252;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            }
+            
+            .features {
+                padding: 4rem 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .features h2 {
+                text-align: center;
+                font-size: 2.5rem;
+                margin-bottom: 3rem;
+                color: #333;
+            }
+            
+            .feature-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+            
+            .feature-card {
+                background: white;
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease;
+                border-left: 4px solid #667eea;
+            }
+            
+            .feature-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .feature-card h3 {
+                color: #667eea;
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .feature-card p {
+                color: #666;
+                line-height: 1.6;
+            }
+            
+            .benefits {
+                background: #f8f9fa;
+                padding: 4rem 2rem;
+            }
+            
+            .benefits-content {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+            .benefits h2 {
+                font-size: 2.5rem;
+                color: #333;
+                margin-bottom: 2rem;
+            }
+            
+            .benefits-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .benefit-item {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            
+            .benefit-item strong {
+                color: #667eea;
+            }
+            
+            .footer-cta {
+                background: #333;
+                color: white;
+                padding: 3rem 2rem;
+                text-align: center;
+            }
+            
+            .footer-cta h2 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-cta p {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+                opacity: 0.9;
+            }
+            
+            @media (max-width: 768px) {
+                .hero h1 {
+                    font-size: 2.5rem;
+                }
+                
+                .features h2,
+                .benefits h2 {
+                    font-size: 2rem;
+                }
+                
+                .feature-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
     </head>
     <body>
-        <div class="container">
-            <header>
-                <h1>Freelancer Hourly Rate Calculator</h1>
-            </header>
-            <main>
-                <div class="main-layout">
-                    <div class="forms-section">
-                        <div class="schedule-card">
-                            <div class="section-header">
-                                <h2>Work Schedule</h2>
-                                <div class="schedule-selector">
-                                    <select
-                                        id="scheduleSelect"
-                                        name="scheduleID"
-                                        hx-post="/schedule"
-                                        hx-target="#schedule-form"
-                                        hx-indicator="#schedule-loading"
-                                        hx-trigger="change"
-                                        hx-include="this"
-                                        hx-swap="outerHTML settle:100ms"
-                                    >
-                                        {{ range .Schedules }}
-                                        <option value="{{ .ID }}" {{ if eq .ID $.ScheduleID }}selected{{ end }}>
-                                            {{ .Label }}
-                                        </option>
-                                        {{ end }}
-                                    </select>
-                                    <div id="schedule-loading" class="htmx-indicator">
-                                        <div class="spinner">Loading...</div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{ template "partials/schedule_form" . }}
-                        </div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>🎯 Freelance Rate Calculator</h1>
+            <p>Calculate optimal rates for on-site vs remote work scenarios</p>
+            <p>Stop undercharging. Start earning what you're worth.</p>
+            <a href="/app" class="cta-button">📊 Try Calculator Now</a>
+        </section>
 
-                        <div class="calculator">
-                            <div class="calculator-section">
-                                <h2>Expense Categories</h2>
-                                {{ range .ExpenseCategories }}
-                                {{ template "partials/expense_category" . }}
-                                {{ end }}
-                            </div>
+        <!-- Features Section -->
+        <section class="features">
+            <h2>Smart Rate Calculation Made Simple</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📋 Personal Budget Wizard</h3>
+                    <p>Create accurate budget sheets using customizable templates as your starting point. No more guesswork - build a budget that reflects your real costs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎯 Smart Cost Categories</h3>
+                    <p>Categorize your expenses into "must-have", "wishful", and "realistic" budgets. Get different rate scenarios based on your lifestyle goals.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📅 Real Working Days</h3>
+                    <p>Calculate rates based on actual working days, accounting for holidays, education days, vacations, and sick leave. Be realistic about your availability.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🏠 On-site vs Remote</h3>
+                    <p>Generate precise rate comparisons for on-site versus remote work, including travel expenses and time considerations. Know what to charge for each scenario.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Template Library</h3>
+                    <p>Access pre-defined cost templates or create your own. Share public templates with the community or keep private ones for your specific needs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🌍 Country-Specific</h3>
+                    <p>Built-in templates for holidays and non-working days by country. Get accurate calculations that reflect your local work culture.</p>
+                </div>
+            </div>
+        </section>
 
-                            <button id="calculate" type="button" hx-post="/calculate" hx-target="#result" hx-include="[name^='expense[']">Calculate Rate</button>
-                            <div id="loading" class="htmx-indicator">
-                                <div class="spinner">Calculating...</div>
-                            </div>
-                        </div>
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <div class="benefits-content">
+                <h2>Why Freelancers Love Our Calculator</h2>
+                
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <strong>Stop Undercharging</strong><br>
+                        Calculate rates that actually cover your costs and desired profit margin
                     </div>
                     
-                    <div class="results-section">
-                        <div class="result" id="result">
-                            {{ template "partials/calculation_result" . }}
-                        </div>
+                    <div class="benefit-item">
+                        <strong>Professional Confidence</strong><br>
+                        Back up your rates with data-driven calculations when negotiating with clients
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <strong>Realistic Planning</strong><br>
+                        Account for real-world factors like sick days, holidays, and education time
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <strong>Location Flexibility</strong><br>
+                        Different rates for on-site vs remote work, including travel considerations
                     </div>
                 </div>
-            </main>
-            <footer>
-                <p>&copy; 2023 Smart Software Engineering SRL</p>
-            </footer>
-        </div>
-        <script src="/app/js/app.js"></script>
-        <script>
-            function toggleCategory(categoryID) {
-                const form = document.getElementById('category-' + categoryID);
-                const indicator = form.previousElementSibling.querySelector('.toggle-indicator');
                 
-                form.classList.toggle('hidden');
-                indicator.textContent = form.classList.contains('hidden') ? '▼' : '▲';
-            }
-        </script>
+                <p><strong>Join thousands of freelancers</strong> who've discovered their true worth and started charging rates that support their lifestyle and business goals.</p>
+            </div>
+        </section>
+
+        <!-- Footer CTA -->
+        <section class="footer-cta">
+            <h2>Ready to Calculate Your Perfect Rate?</h2>
+            <p>Start with our templates, customize for your needs, and discover what you should really be charging.</p>
+            <a href="/app" class="cta-button">🚀 Start Calculating</a>
+            <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+                Free to use • No registration required • Works on all devices
+            </p>
+        </section>
     </body>
 </html>

@@ -1,0 +1,52 @@
+# Development files
+.git
+.gitignore
+README.md
+LICENSE
+dev.sh
+.air.toml
+cookies.txt
+
+# Application binary (will be rebuilt)
+app
+
+# Frontend development files
+frontend/node_modules
+frontend/.vite
+frontend/dist
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history 

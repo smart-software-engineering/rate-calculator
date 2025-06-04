@@ -32,3 +32,8 @@ go.work
 *.log
 
 /build/
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+/internal/server/static/spa/

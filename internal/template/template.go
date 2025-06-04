@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-//go:embed templates/*.html templates/partials/*.html
+//go:embed templates/*.html
 var templateFiles embed.FS
 
 type TemplateData map[string]any
@@ -58,8 +58,8 @@ func NewManager() (*TemplateManager, error) {
 		},
 	})
 
-	log.Println("Parsing templates from root and partials directories")
-	tmpl, err = tmpl.ParseFS(templateFS, "*.html", "partials/*.html")
+	log.Println("Parsing templates from root directory")
+	tmpl, err = tmpl.ParseFS(templateFS, "*.html")
 	if err != nil {
 		log.Printf("Error parsing templates: %v", err)
 		return nil, err

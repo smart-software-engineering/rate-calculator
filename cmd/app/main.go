@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -13,7 +14,7 @@ import (
 )
 
 func main() {
-	addr := flag.String("addr", ":8080", "HTTP server address")
+	addr := flag.String("addr", getServerAddr(), "HTTP server address")
 	devModeFlag := flag.Bool("dev", false, "Run in development mode (less secure, more convenient for local development)")
 	flag.Parse()
 
@@ -56,6 +57,17 @@ func main() {
 	if err := srv.Start(); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
+}
+
+// getServerAddr returns the server address, checking PORT environment variable first (for Fly.io)
+func getServerAddr() string {
+	// Check PORT environment variable (used by Fly.io and other platforms)
+	if port := os.Getenv("PORT"); port != "" {
+		return fmt.Sprintf(":%s", port)
+	}
+
+	// Default to 8080 if no PORT env var is set
+	return ":8080"
 }
 
 func getSessionKey(devMode bool) string {

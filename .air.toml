@@ -6,7 +6,7 @@ cmd = "go build -o ./tmp/main ./cmd/app"
 bin = "tmp/main"
 full_bin = "./tmp/main -dev=true"
 include_ext = ["go", "html", "css", "js", "toml"]
-exclude_dir = ["tmp", "vendor", ".git"]
+exclude_dir = ["tmp", "vendor", ".git", "frontend"]
 exclude_file = [".gitignore"]
 exclude_regex = ["_test\\.go"]
 exclude_unchanged = true
