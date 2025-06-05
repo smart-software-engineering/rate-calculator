@@ -1,0 +1,91 @@
+{
+  "id": "lucerne-ch",
+  "label": "Lucerne, Switzerland",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Switzerland",
+    "region": "Canton of Lucerne",
+    "coordinates": {
+      "latitude": 47.0502,
+      "longitude": 8.3093
+    },
+    "population": 82000,
+    "type": "regional-city",
+    "costIndex": {
+      "value": 175,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    }
+  },
+  "averages": {
+    "monthlyRent": {
+      "oneRoom": 1800,
+      "twoRoom": 2500,
+      "threeRoom": 3200,
+      "currency": "CHF",
+      "source": "col-2025"
+    },
+    "utilities": {
+      "basic": 220,
+      "internet": 69,
+      "mobile": 40,
+      "currency": "CHF",
+      "source": "col-2025"
+    },
+    "food": {
+      "groceries": 750,
+      "restaurantLunch": 30,
+      "restaurantDinner": 50,
+      "currency": "CHF",
+      "source": "col-2025"
+    }
+  },
+  "taxesAndFixCosts": [
+    {
+      "name": "income",
+      "type": "percentage",
+      "amount": 20
+    },
+    {
+      "name": "health",
+      "type": "percentage",
+      "amount": 8
+    },
+    {
+      "name": "pension",
+      "type": "percentage",
+      "amount": 12
+    },
+    {
+      "name": "local-tax",
+      "type": "percentage",
+      "amount": 4
+    }
+  ],
+  "business": {
+    "accommodation": {
+      "type": "business",
+      "rating": 4,
+      "amount": 240,
+      "description": "Mid-class business hotel (Mercure/Novotel level)",
+      "seasonalFactors": {
+        "spring": 1.2,
+        "summer": 1.4,
+        "winter": 1.1,
+        "autumn": 1.2
+      }
+    },
+    "meals": {
+      "label": "Daily Business Meals",
+      "breakdown": {
+        "breakfast": 22,
+        "lunch": 40,
+        "dinner": 58
+      },
+      "amount": 120,
+      "type": "daily",
+      "description": "Full-day business-level restaurant meals"
+    }
+  }
+}

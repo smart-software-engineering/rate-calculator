@@ -1,15 +1,15 @@
 {
-  "ID": "switzerland",
-  "Label": "Switzerland",
-  "Description": "Standard work schedule for Switzerland with national holidays",
-  "UserID": "system",
-  "Public": true,
-  "SortOrder": 15,
-  "WorkSchedule": {
-    "HoursPerWeek": 42.0,
-    "VacationDays": 20,
-    "PublicHolidays": 9,
-    "EducationDays": 5,
-    "SickDays": 5
+  "id": "a1b2c3d4-5e6f-7g8h-9i0j-k1l2m3n4o5p",
+  "label": "Switzerland",
+  "description": "Standard work schedule for Switzerland with national holidays",
+  "userId": "00000000-0000-0000-0000-000000000001",
+  "isPublic": true,
+  "sortOrder": 15,
+  "workSchedule": {
+    "hoursPerWeek": 42.0,
+    "privateHolidays": 20,
+    "publicHolidays": 9,
+    "educationDays": 5,
+    "sickDays": 5
   }
 }

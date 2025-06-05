@@ -1,0 +1,45 @@
+{
+  "id": "route-galati-langenthal",
+  "type": "travel-route",
+  "origin": {
+    "locationId": "galati-ro",
+    "type": "home-base"
+  },
+  "destination": {
+    "locationId": "langenthal-ch",
+    "type": "work-location"
+  },
+  "visaRequirements": "EU-freedom-of-movement",
+  "route": [
+    {
+      "type": "train",
+      "from": "Galati",
+      "to": "Bucharest",
+      "duration": 4,
+      "cost": 20,
+      "currency": "EUR"
+    },
+    {
+      "type": "flight",
+      "from": "Bucharest (OTP)",
+      "to": "Zurich (ZRH)",
+      "cost": 250,
+      "currency": "EUR",
+      "duration": 2.5,
+      "seasonalMultipliers": {
+        "spring": 1.2,
+        "summer": 1.3,
+        "autumn": 1.1,
+        "winter": 1.1
+      }
+    },
+    {
+      "type": "train",
+      "from": "Zurich",
+      "to": "Langenthal",
+      "cost": 45,
+      "currency": "CHF",
+      "duration": 1.25
+    }
+  ]
+}

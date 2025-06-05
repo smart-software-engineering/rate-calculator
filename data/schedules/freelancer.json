@@ -1,15 +1,15 @@
 {
-  "ID": "freelancer",
-  "Label": "Freelancer",
-  "Description": "Optimized schedule for independent contractors with flexibility",
-  "UserID": "user_1",
-  "Public": false,
-  "SortOrder": 1,
-  "WorkSchedule": {
-    "HoursPerWeek": 45.0,
-    "VacationDays": 10,
-    "PublicHolidays": 10,
-    "EducationDays": 5,
-    "SickDays": 1
+  "id": "cd65f822-6583-4a3e-9ce4-687c6c33d48a",
+  "label": "Freelancer",
+  "description": "Optimized schedule for independent contractors with flexibility",
+  "userId": "b76e4c8d-9f3a-4e12-8568-f52e43a12f2d",
+  "isPublic": false,
+  "sortOrder": 1,
+  "workSchedule": {
+    "hoursPerWeek": 45.0,
+    "privateHolidays": 10,
+    "publicHolidays": 10,
+    "educationDays": 5,
+    "sickDays": 1
   }
 }

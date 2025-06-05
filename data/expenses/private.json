@@ -1,0 +1,55 @@
+{
+  "id": "h8i9j0k1-l2m3-n4o5-p6q7-r8s9t0u1v2w",
+  "label": "Private Expenses",
+  "items": [
+    {
+      "id": "i9j0k1l2-m3n4-o5p6-q7r8-s9t0u1v2w3x",
+      "label": "Rent + Household",
+      "amount": 3000,
+      "type": "monthly",
+      "priority": "must-have"
+    },
+    {
+      "id": "j0k1l2m3-n4o5-p6q7-r8s9-t0u1v2w3x4y",
+      "label": "Utilities",
+      "amount": 200,
+      "type": "monthly",
+      "priority": "must-have"
+    },
+    {
+      "id": "k1l2m3n4-o5p6-q7r8-s9t0-u1v2w3x4y5z",
+      "label": "Groceries",
+      "amount": 400,
+      "type": "monthly",
+      "priority": "must-have"
+    },
+    {
+      "id": "l2m3n4o5-p6q7-r8s9-t0u1-v2w3x4y5z6a",
+      "label": "Clothing",
+      "amount": 250,
+      "type": "monthly",
+      "priority": "essential"
+    },
+    {
+      "id": "m3n4o5p6-q7r8-s9t0-u1v2-w3x4y5z6a7b",
+      "label": "Internet + Phone",
+      "amount": 70,
+      "type": "monthly",
+      "priority": "must-have"
+    },
+    {
+      "id": "n4o5p6q7-r8s9-t0u1-v2w3-x4y5z6a7b8c",
+      "label": "Mobility",
+      "amount": 70,
+      "type": "monthly",
+      "priority": "essential"
+    },
+    {
+      "id": "o5p6q7r8-s9t0-u1v2-w3x4-y5z6a7b8c9d",
+      "label": "Diverse",
+      "amount": 50,
+      "type": "monthly",
+      "priority": "nice-to-have"
+    }
+  ]
+}
