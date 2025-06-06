@@ -1,0 +1,52 @@
+{
+  "id": "g7h8i9j0-k1l2-3m4n-5o6p-7q8r9s0t1u2",
+  "label": "Switzerland On-Site Costs",
+  "country": "Switzerland",
+  "currency": "CHF",
+  "timeZone": "Europe/Zurich",
+  "workingDayLength": {
+    "hours": 8.4,
+    "description": "Standard working hours per day on-site"
+  },
+  "expenses": {
+    "accommodation": {
+      "id": "h8i9j0k1-l2m3-4n5o-6p7q-8r9s0t1u2v3",
+      "label": "Hotel Costs",
+      "amount": 200,
+      "type": "nightly",
+      "priority": "must-have",
+      "description": "Standard hotel cost per night in business areas"
+    },
+    "meals": {
+      "id": "i9j0k1l2-m3n4-5o6p-7q8r-9s0t1u2v3w4",
+      "label": "Daily Meals",
+      "amount": 75,
+      "type": "daily",
+      "priority": "must-have"
+    },
+    "localTransport": {
+      "id": "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
+      "label": "Local Transportation",
+      "amount": 25,
+      "type": "daily",
+      "priority": "must-have",
+      "description": "Local public transport or taxi to workplace"
+    },
+    "communication": {
+      "id": "k1l2m3n4-o5p6-7q8r-9s0t-1u2v3w4x5y6",
+      "label": "Roaming Costs",
+      "amount": 15,
+      "type": "daily",
+      "priority": "essential",
+      "description": "Mobile data and phone roaming charges"
+    },
+    "incidentals": {
+      "id": "l2m3n4o5-p6q7-8r9s-0t1u-2v3w4x5y6z7",
+      "label": "Incidental Expenses",
+      "amount": 30,
+      "type": "daily",
+      "priority": "nice-to-have",
+      "description": "Miscellaneous daily expenses"
+    }
+  }
+}

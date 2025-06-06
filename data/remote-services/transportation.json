@@ -1,0 +1,47 @@
+{
+  "id": "transportation-services",
+  "label": "Transportation Services",
+  "services": {
+    "germany": {
+      "id": "germany-transportation",
+      "label": "Germany Transportation Options",
+      "country": "Germany",
+      "currency": "EUR",
+      "services": [
+        {
+          "id": "db-travel",
+          "label": "Deutsche Bahn",
+          "type": "train",
+          "bookingUrl": "https://www.bahn.de",
+          "auth": {
+            "method": "basic",
+            "provider": "deutsche-bahn",
+            "description": "DB customer account"
+          }
+        },
+        {
+          "id": "lufthansa",
+          "label": "Lufthansa",
+          "type": "flight",
+          "bookingUrl": "https://www.lufthansa.com",
+          "auth": {
+            "method": "oauth2",
+            "provider": "lufthansa",
+            "description": "Miles & More account"
+          }
+        },
+        {
+          "id": "flixbus",
+          "label": "FlixBus",
+          "type": "bus",
+          "bookingUrl": "https://www.flixbus.de",
+          "auth": {
+            "method": "basic",
+            "provider": "flixbus",
+            "description": "FlixBus account"
+          }
+        }
+      ]
+    }
+  }
+}

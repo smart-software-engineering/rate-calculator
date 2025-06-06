@@ -1,0 +1,52 @@
+{
+  "id": "m3n4o5p6-q7r8-9s0t-1u2v-3w4x5y6z7a8",
+  "label": "United Kingdom On-Site Costs",
+  "country": "United Kingdom",
+  "currency": "GBP",
+  "timeZone": "Europe/London",
+  "workingDayLength": {
+    "hours": 7.5,
+    "description": "Standard working hours per day on-site"
+  },
+  "expenses": {
+    "accommodation": {
+      "id": "n4o5p6q7-r8s9-0t1u-2v3w-4x5y6z7a8b9",
+      "label": "Hotel Costs",
+      "amount": 150,
+      "type": "nightly",
+      "priority": "must-have",
+      "description": "Standard hotel cost per night in business areas"
+    },
+    "meals": {
+      "id": "o5p6q7r8-s9t0-1u2v-3w4x-5y6z7a8b9c0",
+      "label": "Daily Meals",
+      "amount": 50,
+      "type": "daily",
+      "priority": "must-have"
+    },
+    "localTransport": {
+      "id": "p6q7r8s9-t0u1-2v3w-4x5y-6z7a8b9c0d1",
+      "label": "Local Transportation",
+      "amount": 20,
+      "type": "daily",
+      "priority": "must-have",
+      "description": "Local public transport or taxi to workplace"
+    },
+    "communication": {
+      "id": "q7r8s9t0-u1v2-3w4x-5y6z-7a8b9c0d1e2",
+      "label": "Roaming Costs",
+      "amount": 12,
+      "type": "daily",
+      "priority": "essential",
+      "description": "Mobile data and phone roaming charges"
+    },
+    "incidentals": {
+      "id": "r8s9t0u1-v2w3-4x5y-6z7a-8b9c0d1e2f3",
+      "label": "Incidental Expenses",
+      "amount": 25,
+      "type": "daily",
+      "priority": "nice-to-have",
+      "description": "Miscellaneous daily expenses"
+    }
+  }
+}

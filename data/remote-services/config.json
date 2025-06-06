@@ -1,0 +1,118 @@
+{
+  "id": "remote-services-config",
+  "label": "Remote Services Configuration",
+  "services": [
+    {
+      "id": "vpn-standard",
+      "label": "VPN Access",
+      "type": "vpn",
+      "priority": "must-have",
+      "auth": {
+        "method": "certificate",
+        "provider": "client",
+        "description": "Client must provide VPN certificate"
+      },
+      "costs": {
+        "amount": 20,
+        "type": "monthly",
+        "priority": "must-have",
+        "description": "VPN service subscription"
+      }
+    },
+    {
+      "id": "remote-desktop",
+      "label": "Remote Desktop",
+      "type": "rdp",
+      "priority": "essential",
+      "auth": {
+        "method": "oauth2",
+        "provider": "azure-ad",
+        "description": "Microsoft Azure AD authentication"
+      },
+      "costs": {
+        "amount": 15,
+        "type": "monthly",
+        "priority": "essential",
+        "description": "Remote desktop license"
+      }
+    },
+    {
+      "id": "project-management",
+      "label": "Project Management Tools",
+      "type": "web-service",
+      "priority": "essential",
+      "auth": {
+        "method": "sso",
+        "provider": "client",
+        "variants": ["SAML", "OAuth2"],
+        "description": "Single sign-on through client's identity provider"
+      },
+      "urls": {
+        "production": "https://${client.domain}/project-tools",
+        "staging": "https://staging.${client.domain}/project-tools"
+      },
+      "costs": {
+        "amount": 25,
+        "type": "monthly",
+        "priority": "essential",
+        "description": "Project management tool license"
+      }
+    },
+    {
+      "id": "code-repository",
+      "label": "Code Repository Access",
+      "type": "git",
+      "priority": "must-have",
+      "auth": {
+        "method": "ssh-key",
+        "provider": "client",
+        "description": "SSH key-based authentication for git access"
+      },
+      "urls": {
+        "ssh": "git@${client.domain}:${repository}.git",
+        "https": "https://${client.domain}/${repository}"
+      },
+      "costs": {
+        "amount": 10,
+        "type": "monthly",
+        "priority": "must-have",
+        "description": "Repository hosting costs"
+      }
+    }
+  ],
+  "authMethods": {
+    "supported": [
+      {
+        "id": "oauth2",
+        "label": "OAuth 2.0",
+        "variants": ["Authorization Code", "Client Credentials", "PKCE"],
+        "priority": "must-have"
+      },
+      {
+        "id": "certificate",
+        "label": "Certificate-based",
+        "variants": ["X.509"],
+        "priority": "must-have"
+      },
+      {
+        "id": "sso",
+        "label": "Single Sign-On",
+        "variants": ["SAML 2.0", "OAuth2/OIDC"],
+        "priority": "essential"
+      },
+      {
+        "id": "ssh-key",
+        "label": "SSH Key",
+        "variants": ["ED25519", "RSA"],
+        "priority": "must-have"
+      },
+      {
+        "id": "basic-auth",
+        "label": "Basic Authentication",
+        "variants": ["Username/Password"],
+        "priority": "nice-to-have",
+        "description": "Only for legacy systems, not recommended for new setups"
+      }
+    ]
+  }
+}

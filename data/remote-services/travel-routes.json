@@ -1,0 +1,61 @@
+{
+  "id": "travel-routes",
+  "label": "Travel Routes",
+  "routes": {
+    "de-ch": {
+      "id": "germany-switzerland",
+      "from": {
+        "country": "Germany",
+        "region": "Frankfurt Area"
+      },
+      "to": {
+        "country": "Switzerland",
+        "region": "Zurich Area"
+      },
+      "travelTimeRate": {
+        "percentage": 75,
+        "priority": "must-have",
+        "description": "Percentage of standard rate charged for travel time"
+      },
+      "workableHours": {
+        "arrival": 4,
+        "departure": 4,
+        "description": "Expected working hours on travel days"
+      },
+      "transportationChain": [
+        {
+          "type": "local-transport",
+          "timeInHours": 0.5,
+          "amount": 15,
+          "currency": "EUR",
+          "description": "To Frankfurt Airport"
+        },
+        {
+          "type": "waiting",
+          "timeInHours": 0.5,
+          "description": "Security and boarding buffer"
+        },
+        {
+          "type": "flight",
+          "serviceId": "lufthansa",
+          "timeInHours": 1,
+          "amount": 200,
+          "currency": "EUR",
+          "priority": "essential"
+        },
+        {
+          "type": "waiting",
+          "timeInHours": 0.5,
+          "description": "Immigration and baggage claim"
+        },
+        {
+          "type": "local-transport",
+          "timeInHours": 0.5,
+          "amount": 25,
+          "currency": "CHF",
+          "description": "To Zurich city center"
+        }
+      ]
+    }
+  }
+}
