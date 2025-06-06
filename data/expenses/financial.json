@@ -1,0 +1,24 @@
+{
+  "id": "financial-goals",
+  "label": "Financial Goals",
+  "items": [
+    {
+      "id": "savings",
+      "label": "Savings",
+      "amount": 20,
+      "type": "percentage"
+    },
+    {
+      "id": "retirement-fund",
+      "label": "Retirement Fund",
+      "amount": 15,
+      "type": "percentage"
+    },
+    {
+      "id": "emergency-fund",
+      "label": "Emergency Fund",
+      "amount": 10,
+      "type": "percentage"
+    }
+  ]
+}

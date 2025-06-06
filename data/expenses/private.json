@@ -1,0 +1,48 @@
+{
+  "id": "private-expenses",
+  "label": "Private Expenses",
+  "items": [
+    {
+      "id": "rent-household",
+      "label": "Rent + Household",
+      "amount": 3000,
+      "type": "monthly"
+    },
+    {
+      "id": "utilities",
+      "label": "Utilities",
+      "amount": 200,
+      "type": "monthly"
+    },
+    {
+      "id": "groceries",
+      "label": "Groceries",
+      "amount": 400,
+      "type": "monthly"
+    },
+    {
+      "id": "clothing",
+      "label": "Clothing",
+      "amount": 250,
+      "type": "monthly"
+    },
+    {
+      "id": "internet-phone",
+      "label": "Internet + Phone",
+      "amount": 70,
+      "type": "monthly"
+    },
+    {
+      "id": "mobility",
+      "label": "Mobility",
+      "amount": 70,
+      "type": "monthly"
+    },
+    {
+      "id": "diverse",
+      "label": "Diverse",
+      "amount": 50,
+      "type": "monthly"
+    }
+  ]
+}

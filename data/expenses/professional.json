@@ -1,0 +1,54 @@
+{
+  "id": "professional-expenses",
+  "label": "Professional Expenses",
+  "items": [
+    {
+      "id": "office",
+      "label": "Office",
+      "amount": 200,
+      "type": "monthly"
+    },
+    {
+      "id": "software-hardware",
+      "label": "Software + Hardware",
+      "amount": 100,
+      "type": "monthly"
+    },
+    {
+      "id": "communication",
+      "label": "Communication",
+      "amount": 100,
+      "type": "yearly"
+    },
+    {
+      "id": "insurances",
+      "label": "Insurances",
+      "amount": 100,
+      "type": "monthly"
+    },
+    {
+      "id": "fees-donations",
+      "label": "Fees, Donations",
+      "amount": 50,
+      "type": "yearly"
+    },
+    {
+      "id": "training-education",
+      "label": "Training & Education",
+      "amount": 200,
+      "type": "yearly"
+    },
+    {
+      "id": "mobility",
+      "label": "Mobility",
+      "amount": 1000,
+      "type": "yearly"
+    },
+    {
+      "id": "ads",
+      "label": "Ads",
+      "amount": 250,
+      "type": "yearly"
+    }
+  ]
+}
