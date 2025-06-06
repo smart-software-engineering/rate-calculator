@@ -1,21 +1,21 @@
 {
-  "id": "taxes",
+  "id": "y5z6a7b8-c9d0-e1f2-g3h4-i5j6k7l8m9n",
   "label": "Taxes",
   "items": [
     {
-      "id": "pension",
+      "id": "z6a7b8c9-d0e1-f2g3-h4i5-j6k7l8m9n0o",
       "label": "Pension",
       "amount": 25,
       "type": "percentage"
     },
     {
-      "id": "health-insurance",
+      "id": "a7b8c9d0-e1f2-g3h4-i5j6-k7l8m9n0o1p",
       "label": "Health Insurance",
       "amount": 10,
       "type": "percentage"
     },
     {
-      "id": "income-tax",
+      "id": "b8c9d0e1-f2g3-h4i5-j6k7-l8m9n0o1p2q",
       "label": "Income Tax",
       "amount": 10,
       "type": "percentage"

@@ -1,21 +1,21 @@
 {
-  "id": "financial-goals",
+  "id": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s",
   "label": "Financial Goals",
   "items": [
     {
-      "id": "savings",
+      "id": "e5f6g7h8-i9j0-k1l2-m3n4-o5p6q7r8s9t",
       "label": "Savings",
       "amount": 20,
       "type": "percentage"
     },
     {
-      "id": "retirement-fund",
+      "id": "f6g7h8i9-j0k1-l2m3-n4o5-p6q7r8s9t0u",
       "label": "Retirement Fund",
       "amount": 15,
       "type": "percentage"
     },
     {
-      "id": "emergency-fund",
+      "id": "g7h8i9j0-k1l2-m3n4-o5p6-q7r8s9t0u1v",
       "label": "Emergency Fund",
       "amount": 10,
       "type": "percentage"
