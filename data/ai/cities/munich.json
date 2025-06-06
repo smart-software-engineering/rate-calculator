@@ -1,0 +1,110 @@
+{
+  "id": "munich-de",
+  "label": "Munich, Germany",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Germany",
+    "region": "Bavaria",
+    "coordinates": {
+      "latitude": 48.1351,
+      "longitude": 11.5820
+    },
+    "population": 1472000,
+    "type": "major-city",
+    "costIndex": {
+      "value": 145,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "high-income-german",
+    "transitHub": {
+      "type": "major",
+      "facilities": ["international-airport", "main-train-station"],
+      "connections": ["direct-rail-major-cities", "international-flights"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wls-2025",
+        "name": "German Wage Level Survey 2025",
+        "url": "https://www.destatis.de/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 1500,
+        "twoRoom": 2000,
+        "threeRoom": 2800,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 220,
+        "internet": 35,
+        "mobile": 30,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 400,
+        "restaurantLunch": 15,
+        "restaurantDinner": 35,
+        "currency": "EUR",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "city-center",
+      "schwabing",
+      "bogenhausen",
+      "maxvorstadt"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Munich Airport",
+        "distance": 37,
+        "transitTime": {
+          "train": 45,
+          "car": 35
+        }
+      },
+      {
+        "name": "Nuremberg",
+        "distance": 170,
+        "transitTime": {
+          "train": 65,
+          "car": 120
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 4,
+            "averageRate": 180,
+            "distanceToCenter": 1.0,
+            "currency": "EUR"
+          },
+          {
+            "name": "Premium Business Hotel",
+            "rating": 5,
+            "averageRate": 250,
+            "distanceToCenter": 0.5,
+            "currency": "EUR"
+          }
+        ]
+      }
+    }
+  }
+}

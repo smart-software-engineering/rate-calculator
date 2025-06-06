@@ -1,0 +1,124 @@
+{
+  "id": "galati-ro",
+  "label": "Galati, Romania",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Romania",
+    "region": "Moldova",
+    "coordinates": {
+      "latitude": 45.4371,
+      "longitude": 28.0428
+    },
+    "population": 250000,
+    "type": "regional-city",
+    "costIndex": {
+      "value": 45,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "developing-eastern-eu",
+    "transitHub": "bucharest"
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "romania-stats-2025",
+        "name": "Romanian National Statistics 2025",
+        "url": "https://insse.ro/costs"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 250,
+        "twoRoom": 350,
+        "threeRoom": 450,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 80,
+        "internet": 10,
+        "mobile": 8,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 200,
+        "restaurantLunch": 8,
+        "restaurantDinner": 15,
+        "currency": "EUR",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": ["port-area", "city-center"],
+    "nearbyHubs": [
+      {
+        "name": "Bucharest",
+        "distance": 250,
+        "transitTime": {
+          "train": 180,
+          "car": 210,
+          "publicTransport": 240
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Hotel Mercur",
+            "rating": 3,
+            "averageRate": 60,
+            "distanceToCenter": 0.2,
+            "currency": "EUR"
+          }
+        ],
+        "apartments": [
+          {
+            "type": "standard",
+            "monthlyRate": 400,
+            "minStay": "1 month",
+            "currency": "EUR"
+          }
+        ]
+      }
+    }
+  },
+  "expenses": {
+    "accommodation": {
+      "id": "acc-galati-standard",
+      "label": "Hotel Costs",
+      "amount": 60,
+      "type": "nightly",
+      "priority": "must-have",
+      "description": "Standard business hotel in Galati",
+      "aiHints": {
+        "factors": [
+          "seasonal-variation: low",
+          "business-district-premium: 5%",
+          "alternative-search-terms: [business hotel galati, apartment rental galati]"
+        ]
+      }
+    },
+    "meals": {
+      "id": "meals-galati-standard",
+      "label": "Daily Meals",
+      "amount": 25,
+      "type": "daily",
+      "priority": "must-have",
+      "aiHints": {
+        "breakdown": "typical-romanian-business",
+        "alternatives": ["self-catering", "meal-allowance"],
+        "localSpecifics": ["lower restaurant prices", "local markets available"]
+      }
+    }
+  }
+}

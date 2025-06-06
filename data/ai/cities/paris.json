@@ -1,0 +1,110 @@
+{
+  "id": "paris-fr",
+  "label": "Paris, France",
+  "type": "location-costs",
+  "metadata": {
+    "country": "France",
+    "region": "Île-de-France",
+    "coordinates": {
+      "latitude": 48.8566,
+      "longitude": 2.3522
+    },
+    "population": 2161000,
+    "type": "capital-city",
+    "costIndex": {
+      "value": 155,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "high-income-french",
+    "transitHub": {
+      "type": "major",
+      "facilities": ["international-airports", "main-train-station"],
+      "connections": ["direct-rail-major-cities", "international-flights", "tgv"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wls-2025",
+        "name": "French Wage Level Survey 2025",
+        "url": "https://www.insee.fr/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 1800,
+        "twoRoom": 2500,
+        "threeRoom": 3500,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 180,
+        "internet": 30,
+        "mobile": 25,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 450,
+        "restaurantLunch": 18,
+        "restaurantDinner": 45,
+        "currency": "EUR",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "la-defense",
+      "opera",
+      "8th-arrondissement",
+      "16th-arrondissement"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Charles de Gaulle Airport",
+        "distance": 25,
+        "transitTime": {
+          "train": 45,
+          "car": 45
+        }
+      },
+      {
+        "name": "Lyon",
+        "distance": 465,
+        "transitTime": {
+          "train": 120,
+          "car": 270
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 4,
+            "averageRate": 220,
+            "distanceToCenter": 2.0,
+            "currency": "EUR"
+          },
+          {
+            "name": "Premium Business Hotel",
+            "rating": 5,
+            "averageRate": 350,
+            "distanceToCenter": 0.5,
+            "currency": "EUR"
+          }
+        ]
+      }
+    }
+  }
+}

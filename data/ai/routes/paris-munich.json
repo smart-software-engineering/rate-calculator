@@ -1,0 +1,107 @@
+{
+  "id": "route-paris-munich",
+  "type": "travel-route",
+  "origin": {
+    "locationId": "paris-fr",
+    "type": "home-base"
+  },
+  "destination": {
+    "locationId": "munich-de",
+    "type": "work-location"
+  },
+  "routeMetadata": {
+    "distance": 850,
+    "timeZoneDifference": 0,
+    "borderCrossings": ["FR-DE"],
+    "visaRequirements": "EU-freedom-of-movement",
+    "seasonalFactors": [
+      {
+        "season": "winter",
+        "impactLevel": "low",
+        "description": "Minimal impact on travel times"
+      }
+    ]
+  },
+  "recommendedTransport": {
+    "primary": {
+      "type": "flight",
+      "route": [
+        {
+          "from": "Paris (CDG)",
+          "to": "Munich (MUC)",
+          "typical": {
+            "cost": {
+              "amount": 180,
+              "currency": "EUR",
+              "variability": "medium",
+              "seasonalMultipliers": {
+                "summer": 1.2,
+                "winter": 1.0
+              }
+            },
+            "duration": {
+              "hours": 1.5,
+              "reliability": "high"
+            }
+          },
+          "providers": ["Lufthansa", "Air France"],
+          "frequency": "multiple-daily",
+          "aiHints": {
+            "searchTerms": ["CDG-MUC direct flight", "Paris Munich flight"],
+            "priceTrackers": ["skyscanner", "google-flights"],
+            "bestBookingTime": "1-2 months ahead"
+          }
+        }
+      ],
+      "connections": {
+        "origin": {
+          "type": "train",
+          "from": "Paris City",
+          "to": "CDG Airport",
+          "duration": 0.75,
+          "cost": 10,
+          "currency": "EUR"
+        },
+        "destination": {
+          "type": "train",
+          "from": "Munich Airport",
+          "to": "Munich HBF",
+          "duration": 0.75,
+          "cost": 12,
+          "currency": "EUR"
+        }
+      }
+    },
+    "alternative": {
+      "type": "train",
+      "route": "TGV-ICE route",
+      "duration": 6,
+      "cost": 150,
+      "currency": "EUR",
+      "sustainability": "high",
+      "comfort": "high"
+    }
+  },
+  "workableTime": {
+    "travelDays": {
+      "outbound": {
+        "workableHours": 6,
+        "timeOfDay": "morning",
+        "energyLevel": "high"
+      },
+      "return": {
+        "workableHours": 6,
+        "timeOfDay": "evening",
+        "energyLevel": "medium"
+      }
+    },
+    "aiHints": {
+      "factors": [
+        "timezone-adjustment: none",
+        "flight-duration: short",
+        "connection-complexity: low",
+        "work-impact: low"
+      ]
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "id": "belfort-fr",
+  "label": "Belfort, France",
+  "type": "location-costs",
+  "metadata": {
+    "country": "France",
+    "region": "Bourgogne-Franche-Comté",
+    "coordinates": {
+      "latitude": 47.6379,
+      "longitude": 6.8628
+    },
+    "population": 50000,
+    "type": "medium-city",
+    "costIndex": {
+      "value": 125,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "medium-income-french",
+    "transitHub": {
+      "type": "medium",
+      "facilities": ["regional-train-station"],
+      "connections": ["tgv", "regional-rail"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wls-2025",
+        "name": "French Wage Level Survey 2025",
+        "url": "https://www.insee.fr/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 500,
+        "twoRoom": 700,
+        "threeRoom": 900,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 140,
+        "internet": 30,
+        "mobile": 25,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 350,
+        "restaurantLunch": 14,
+        "restaurantDinner": 28,
+        "currency": "EUR",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "city-center",
+      "technopole",
+      "gare-tgv"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "EuroAirport Basel",
+        "distance": 70,
+        "transitTime": {
+          "train": 75,
+          "car": 60
+        }
+      },
+      {
+        "name": "Mulhouse",
+        "distance": 40,
+        "transitTime": {
+          "train": 25,
+          "car": 35
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 3,
+            "averageRate": 95,
+            "distanceToCenter": 0.5,
+            "currency": "EUR"
+          },
+          {
+            "name": "Business Hotel",
+            "rating": 4,
+            "averageRate": 120,
+            "distanceToCenter": 0.3,
+            "currency": "EUR"
+          }
+        ]
+      }
+    }
+  }
+}

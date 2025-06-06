@@ -1,0 +1,111 @@
+{
+  "id": "bucharest-ro",
+  "label": "Bucharest, Romania",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Romania",
+    "region": "Bucharest-Ilfov",
+    "coordinates": {
+      "latitude": 44.4268,
+      "longitude": 26.1025
+    },
+    "population": 2161000,
+    "type": "capital-city",
+    "costIndex": {
+      "value": 55,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "emerging-eu-eastern",
+    "transitHub": {
+      "type": "major",
+      "facilities": ["international-airport", "main-train-station"],
+      "connections": ["direct-rail-major-cities", "international-flights"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "nsl-2025",
+        "name": "National Salary Level Survey 2025",
+        "url": "https://www.insse.ro/salary-data"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 450,
+        "twoRoom": 650,
+        "threeRoom": 850,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 100,
+        "internet": 15,
+        "mobile": 10,
+        "currency": "EUR",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 300,
+        "restaurantLunch": 12,
+        "restaurantDinner": 25,
+        "currency": "EUR",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "sector-1-north",
+      "pipera",
+      "city-center",
+      "militari"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Henri Coandă International Airport",
+        "distance": 16.5,
+        "transitTime": {
+          "train": 20,
+          "car": 30,
+          "publicTransport": 40
+        }
+      },
+      {
+        "name": "Ploiesti",
+        "distance": 60,
+        "transitTime": {
+          "train": 50,
+          "car": 60
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 4,
+            "averageRate": 100,
+            "distanceToCenter": 1.0,
+            "currency": "EUR"
+          },
+          {
+            "name": "Premium Business Hotel",
+            "rating": 5,
+            "averageRate": 150,
+            "distanceToCenter": 0.5,
+            "currency": "EUR"
+          }
+        ]
+      }
+    }
+  }
+}

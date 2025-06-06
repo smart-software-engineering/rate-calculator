@@ -1,0 +1,109 @@
+{
+  "id": "langenthal-ch",
+  "label": "Langenthal, Switzerland",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Switzerland",
+    "region": "Canton of Bern",
+    "coordinates": {
+      "latitude": 47.2150,
+      "longitude": 7.7850
+    },
+    "population": 15500,
+    "type": "small-city",
+    "costIndex": {
+      "value": 165,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "high-income-swiss-german",
+    "transitHub": {
+      "type": "small",
+      "facilities": ["regional-train-station"],
+      "connections": ["regional-rail"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wsl-2025",
+        "name": "Swiss Wage Level Survey 2025",
+        "url": "https://www.bfs.admin.ch/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 1400,
+        "twoRoom": 1800,
+        "threeRoom": 2400,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 200,
+        "internet": 69,
+        "mobile": 40,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 700,
+        "restaurantLunch": 25,
+        "restaurantDinner": 45,
+        "currency": "CHF",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "city-center",
+      "industrial-zone",
+      "bahnhof-area"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Zurich Airport",
+        "distance": 80,
+        "transitTime": {
+          "train": 90,
+          "car": 75
+        }
+      },
+      {
+        "name": "Bern",
+        "distance": 50,
+        "transitTime": {
+          "train": 45,
+          "car": 50
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 3,
+            "averageRate": 180,
+            "distanceToCenter": 0.5,
+            "currency": "CHF"
+          },
+          {
+            "name": "Business Hotel",
+            "rating": 4,
+            "averageRate": 220,
+            "distanceToCenter": 0.3,
+            "currency": "CHF"
+          }
+        ]
+      }
+    }
+  }
+}

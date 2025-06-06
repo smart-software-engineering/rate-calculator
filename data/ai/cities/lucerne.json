@@ -1,0 +1,110 @@
+{
+  "id": "lucerne-ch",
+  "label": "Lucerne, Switzerland",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Switzerland",
+    "region": "Canton of Lucerne",
+    "coordinates": {
+      "latitude": 47.0502,
+      "longitude": 8.3093
+    },
+    "population": 82000,
+    "type": "regional-city",
+    "costIndex": {
+      "value": 175,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "high-income-swiss-german",
+    "transitHub": {
+      "type": "medium",
+      "facilities": ["main-train-station"],
+      "connections": ["direct-rail-major-cities"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wsl-2025",
+        "name": "Swiss Wage Level Survey 2025",
+        "url": "https://www.bfs.admin.ch/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 1800,
+        "twoRoom": 2500,
+        "threeRoom": 3200,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 220,
+        "internet": 69,
+        "mobile": 40,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 750,
+        "restaurantLunch": 30,
+        "restaurantDinner": 50,
+        "currency": "CHF",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "city-center",
+      "littau",
+      "reussbühl",
+      "horw"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Zurich Airport",
+        "distance": 65,
+        "transitTime": {
+          "train": 75,
+          "car": 60
+        }
+      },
+      {
+        "name": "Zug",
+        "distance": 25,
+        "transitTime": {
+          "train": 25,
+          "car": 30
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 4,
+            "averageRate": 250,
+            "distanceToCenter": 0.5,
+            "currency": "CHF"
+          },
+          {
+            "name": "Premium Business Hotel",
+            "rating": 5,
+            "averageRate": 350,
+            "distanceToCenter": 0.2,
+            "currency": "CHF"
+          }
+        ]
+      }
+    }
+  }
+}

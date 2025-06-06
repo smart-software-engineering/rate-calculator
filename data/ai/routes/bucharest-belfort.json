@@ -1,0 +1,107 @@
+{
+  "id": "route-bucharest-belfort",
+  "type": "travel-route",
+  "origin": {
+    "locationId": "bucharest-ro",
+    "type": "home-base"
+  },
+  "destination": {
+    "locationId": "belfort-fr",
+    "type": "work-location"
+  },
+  "routeMetadata": {
+    "distance": 1700,
+    "timeZoneDifference": 1,
+    "borderCrossings": ["RO-HU", "HU-AT", "AT-DE", "DE-FR"],
+    "visaRequirements": "EU-freedom-of-movement",
+    "seasonalFactors": [
+      {
+        "season": "winter",
+        "impactLevel": "medium",
+        "description": "Possible delays in mountainous regions"
+      }
+    ]
+  },
+  "recommendedTransport": {
+    "primary": {
+      "type": "flight",
+      "route": [
+        {
+          "from": "Bucharest (OTP)",
+          "to": "Basel (BSL)",
+          "typical": {
+            "cost": {
+              "amount": 220,
+              "currency": "EUR",
+              "variability": "high",
+              "seasonalMultipliers": {
+                "summer": 1.3,
+                "winter": 1.1
+              }
+            },
+            "duration": {
+              "hours": 2.5,
+              "reliability": "high"
+            }
+          },
+          "providers": ["Wizz Air", "Swiss"],
+          "frequency": "3-weekly",
+          "aiHints": {
+            "searchTerms": ["OTP-BSL direct flight", "Bucharest Basel flight"],
+            "priceTrackers": ["skyscanner", "google-flights"],
+            "bestBookingTime": "2-3 months ahead"
+          }
+        }
+      ],
+      "connections": {
+        "origin": {
+          "type": "taxi",
+          "from": "Bucharest City",
+          "to": "Bucharest Airport",
+          "duration": 0.5,
+          "cost": 25,
+          "currency": "EUR"
+        },
+        "destination": {
+          "type": "train",
+          "from": "Basel",
+          "to": "Belfort",
+          "duration": 1.5,
+          "cost": 35,
+          "currency": "EUR"
+        }
+      }
+    },
+    "alternative": {
+      "type": "train",
+      "route": "Orient Express route",
+      "duration": 22,
+      "cost": 320,
+      "currency": "EUR",
+      "sustainability": "high",
+      "comfort": "medium"
+    }
+  },
+  "workableTime": {
+    "travelDays": {
+      "outbound": {
+        "workableHours": 3,
+        "timeOfDay": "afternoon",
+        "energyLevel": "medium"
+      },
+      "return": {
+        "workableHours": 4,
+        "timeOfDay": "morning",
+        "energyLevel": "medium"
+      }
+    },
+    "aiHints": {
+      "factors": [
+        "timezone-adjustment: +1 hour going west",
+        "flight-duration: medium",
+        "connection-complexity: medium",
+        "work-impact: medium"
+      ]
+    }
+  }
+}

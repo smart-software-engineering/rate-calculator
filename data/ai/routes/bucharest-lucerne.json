@@ -1,0 +1,107 @@
+{
+  "id": "route-bucharest-lucerne",
+  "type": "travel-route",
+  "origin": {
+    "locationId": "bucharest-ro",
+    "type": "home-base"
+  },
+  "destination": {
+    "locationId": "lucerne-ch",
+    "type": "work-location"
+  },
+  "routeMetadata": {
+    "distance": 1650,
+    "timeZoneDifference": 1,
+    "borderCrossings": ["RO-HU", "HU-AT", "AT-CH"],
+    "visaRequirements": "EU-freedom-of-movement",
+    "seasonalFactors": [
+      {
+        "season": "winter",
+        "impactLevel": "medium",
+        "description": "Possible delays due to snow in Alpine regions"
+      }
+    ]
+  },
+  "recommendedTransport": {
+    "primary": {
+      "type": "flight",
+      "route": [
+        {
+          "from": "Bucharest (OTP)",
+          "to": "Zurich (ZRH)",
+          "typical": {
+            "cost": {
+              "amount": 250,
+              "currency": "EUR",
+              "variability": "high",
+              "seasonalMultipliers": {
+                "summer": 1.3,
+                "winter": 1.1
+              }
+            },
+            "duration": {
+              "hours": 2.5,
+              "reliability": "high"
+            }
+          },
+          "providers": ["Swiss", "Austrian", "Lufthansa"],
+          "frequency": "daily",
+          "aiHints": {
+            "searchTerms": ["OTP-ZRH direct flight", "Bucharest Zurich flight"],
+            "priceTrackers": ["skyscanner", "google-flights"],
+            "bestBookingTime": "2-3 months ahead"
+          }
+        }
+      ],
+      "connections": {
+        "origin": {
+          "type": "taxi",
+          "from": "Bucharest City",
+          "to": "Bucharest Airport",
+          "duration": 0.5,
+          "cost": 25,
+          "currency": "EUR"
+        },
+        "destination": {
+          "type": "train",
+          "from": "Zurich",
+          "to": "Lucerne",
+          "duration": 1,
+          "cost": 32,
+          "currency": "CHF"
+        }
+      }
+    },
+    "alternative": {
+      "type": "train",
+      "route": "Orient Express route",
+      "duration": 22,
+      "cost": 320,
+      "currency": "EUR",
+      "sustainability": "high",
+      "comfort": "medium"
+    }
+  },
+  "workableTime": {
+    "travelDays": {
+      "outbound": {
+        "workableHours": 3,
+        "timeOfDay": "afternoon",
+        "energyLevel": "medium"
+      },
+      "return": {
+        "workableHours": 4,
+        "timeOfDay": "morning",
+        "energyLevel": "high"
+      }
+    },
+    "aiHints": {
+      "factors": [
+        "timezone-adjustment: +1 hour going west",
+        "flight-duration: medium",
+        "connection-complexity: low",
+        "work-impact: low"
+      ]
+    }
+  }
+}

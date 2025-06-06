@@ -1,0 +1,131 @@
+{
+  "id": "zurich-ch",
+  "label": "Zurich, Switzerland",
+  "type": "location-costs",
+  "metadata": {
+    "country": "Switzerland",
+    "region": "Canton of Zurich",
+    "coordinates": {
+      "latitude": 47.3769,
+      "longitude": 8.5417
+    },
+    "population": 415367,
+    "type": "major-city",
+    "costIndex": {
+      "value": 185,
+      "relativeTo": "EU-average",
+      "source": "eurostat-2025",
+      "lastUpdated": "2025-06"
+    },
+    "economicZone": "high-income-swiss-german",
+    "transitHub": {
+      "type": "major",
+      "facilities": ["international-airport", "main-train-station"],
+      "connections": ["direct-rail-major-cities", "international-flights"]
+    }
+  },
+  "referenceData": {
+    "sources": [
+      {
+        "id": "wsl-2025",
+        "name": "Swiss Wage Level Survey 2025",
+        "url": "https://www.bfs.admin.ch/wage-levels"
+      },
+      {
+        "id": "col-2025",
+        "name": "Cost of Living Index 2025",
+        "url": "https://www.numbeo.com/cost-of-living/"
+      }
+    ],
+    "averages": {
+      "monthlyRent": {
+        "oneRoom": 2200,
+        "twoRoom": 3000,
+        "threeRoom": 3800,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "utilities": {
+        "basic": 250,
+        "internet": 69,
+        "mobile": 40,
+        "currency": "CHF",
+        "source": "col-2025"
+      },
+      "food": {
+        "groceries": 800,
+        "restaurantLunch": 35,
+        "restaurantDinner": 60,
+        "currency": "CHF",
+        "source": "col-2025"
+      }
+    }
+  },
+  "businessContext": {
+    "mainBusinessAreas": [
+      "zurich-west",
+      "city-center",
+      "oerlikon",
+      "airport-area"
+    ],
+    "nearbyHubs": [
+      {
+        "name": "Airport",
+        "distance": 12,
+        "transitTime": {
+          "train": 10,
+          "car": 20,
+          "publicTransport": 15
+        }
+      },
+      {
+        "name": "Basel",
+        "distance": 86,
+        "transitTime": {
+          "train": 53,
+          "car": 75
+        }
+      }
+    ],
+    "typicalAccommodation": {
+      "business": {
+        "hotels": [
+          {
+            "name": "Mid-range Business Hotel",
+            "rating": 4,
+            "averageRate": 280,
+            "distanceToCenter": 1.0,
+            "currency": "CHF",
+            "aiHints": {
+              "factors": [
+                "high-season-markup: 25%",
+                "business-district-premium: 15%"
+              ]
+            }
+          },
+          {
+            "name": "Premium Business Hotel",
+            "rating": 5,
+            "averageRate": 450,
+            "distanceToCenter": 0.2,
+            "currency": "CHF"
+          }
+        ],
+        "apartments": [
+          {
+            "type": "serviced",
+            "monthlyRate": 4500,
+            "minStay": "1 month",
+            "currency": "CHF"
+          },
+          {
+            "type": "business-studio",
+            "monthlyRate": 3200,
+            "minStay": "3 months",
+            "currency": "CHF"
+          }
+        ]
+      }
+    }
+  }
+}
