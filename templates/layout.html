@@ -4,25 +4,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="/assets/css/app.css">
-  <script src="/assets/js/app.js"></script>
-  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/app.js"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
 <body>
-  <nav>
-    <a href="/">Freelanging Rate Calculator</a>
-    <!-- TODO Logged In or Signin / Signup-->
+  <nav class="navbar">
+    <a href="/" class="nav-link{{if eq .ActivePage "home"}} active{{end}}">Freelanging Rate Calculator</a>
+    <a href="/admin" class="nav-link{{if eq .ActivePage "admin"}} active{{end}}">Administration</a>
+    <a href="/login" class="nav-link{{if eq .ActivePage "login"}} active{{end}}">Login</a>
+    <a href="/billing" class="nav-link{{if eq .ActivePage "billing"}} active{{end}}">Billing</a>
+    <a href="/settings" class="nav-link{{if eq .ActivePage "settings"}} active{{end}}">Settings</a>
+    <a href="/logout" class="nav-link{{if eq .ActivePage "logout"}} active{{end}}">Logout</a>
   </nav>
   <header>
     {{block "header" .}}{{end}}
   </header>
-  <main>
-    {{block "content" .}}{{end}}
-  </main>
-  <sidebar>
-    {{block "sidebar" .}}{{end}}
-  </sidebar>
+  <div class="content-layout">
+    <main>
+      {{block "content" .}}{{end}}
+    </main>
+    <aside class="sidebar">
+      {{block "sidebar" .}}{{end}}
+    </aside>
+  </div>
 </body>
 
 </html>

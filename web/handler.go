@@ -1,16 +1,18 @@
 package web
 
 import (
+	"embed"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
+
+//go:embed ../../static/css/* ../../static/js/* ../../static/favicon.ico
+var staticFS embed.FS
 
 func init() {
 	// mime.AddExtensionType(".js", "application/javascript")
@@ -42,15 +44,11 @@ func NewHandler() *Handler {
 
 	h.Get("/show", h.Show())
 
-	// Create a route along /files that will serve contents from
-	// the ./data/ folder.
-	// TODO refactor this
-	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, "assets"))
-	h.FileServer("/assets/", filesDir)
-
 	// Mount the admin sub-router
 	h.Mount("/admin", adminRouter())
+
+	// Serve static files from /static directory at the root URL path
+	h.ServeStatic()
 
 	return h
 }
@@ -125,4 +123,10 @@ func (h *Handler) FileServer(path string, root http.FileSystem) {
 	h.Get(path+"*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
+}
+
+func (h *Handler) ServeStatic() {
+	// Serve embedded static files at root (e.g. /css/app.css)
+	fs := http.FS(staticFS)
+	h.FileServer("/", fs)
 }
