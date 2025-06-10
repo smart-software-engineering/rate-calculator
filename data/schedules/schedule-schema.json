@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "label", "description", "userId", "isPublic", "sortOrder", "workSchedule"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for the schedule"
+    },
+    "label": {
+      "type": "string",
+      "description": "Name of the country or schedule type"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the work schedule"
+    },
+    "userId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "ID of the user who created or owns this schedule"
+    },
+    "isPublic": {
+      "type": "boolean",
+      "description": "Whether this schedule is publicly available"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Position in the list when displaying multiple schedules"
+    },
+    "workSchedule": {
+      "type": "object",
+      "required": ["hoursPerWeek", "privateHolidays", "publicHolidays", "educationDays", "sickDays"],
+      "properties": {
+        "hoursPerWeek": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 168,
+          "description": "Standard working hours per week"
+        },
+        "privateHolidays": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of private holiday days per year"
+        },
+        "publicHolidays": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of public holiday days per year"
+        },
+        "educationDays": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of education/training days per year"
+        },
+        "sickDays": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of sick days allowed per year"
+        }
+      }
+    }
+  }
+}

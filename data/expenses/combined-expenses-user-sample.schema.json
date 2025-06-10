@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CombinedExpensesUserSample",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "label": { "type": "string" },
+    "userId": { "type": "string" },
+    "date": { "type": "string", "format": "date-time" },
+    "homeOffice": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "label": { "type": "string" },
+            "type": { "type": "string" },
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "country": { "type": "string" },
+                "coordinates": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": { "type": "number" },
+                    "longitude": { "type": "number" }
+                  },
+                  "required": ["latitude", "longitude"]
+                },
+                "population": { "type": "number" },
+                "costIndex": {
+                  "type": "object",
+                  "properties": {
+                    "value": { "type": "number" },
+                    "relativeTo": { "type": "string" },
+                    "source": { "type": "string" },
+                    "lastUpdated": { "type": "string" }
+                  },
+                  "required": ["value", "relativeTo", "source", "lastUpdated"]
+                }
+              },
+              "required": ["country", "coordinates", "population", "costIndex"]
+            }
+          },
+          "required": ["id", "label", "type", "metadata"]
+        },
+        "professional": { "$ref": "#/definitions/expenseCategory" },
+        "private": { "$ref": "#/definitions/expenseCategory" },
+        "financial": { "$ref": "#/definitions/expenseCategory" }
+      },
+      "required": ["location", "professional", "private", "financial"]
+    },
+    "onSiteCosts": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "label": { "type": "string" },
+            "type": { "type": "string" },
+            "metadata": { "$ref": "#/properties/homeOffice/properties/location/properties/metadata" }
+          },
+          "required": ["id", "label", "type", "metadata"]
+        },
+        "travelRoute": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "type": { "type": "string" },
+            "visaRequirements": { "type": "string" },
+            "hourlyRate": { "type": "number" },
+            "route": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string" },
+                  "from": { "type": "string" },
+                  "to": { "type": "string" },
+                  "duration": { "type": "number" },
+                  "cost": { "type": "number" },
+                  "currency": { "type": "string" },
+                  "basePrice": { "type": "number" },
+                  "maxMultiplier": {
+                    "type": "object",
+                    "properties": {
+                      "season": { "type": "string" },
+                      "value": { "type": "number" }
+                    },
+                    "required": ["season", "value"]
+                  },
+                  "adjustedPrice": { "type": "number" }
+                },
+                "required": ["from", "to"]
+              }
+            }
+          },
+          "required": ["id", "type", "visaRequirements", "hourlyRate", "route"]
+        },
+        "accommodations": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "rating": { "type": "number" },
+            "currency": { "type": "string" },
+            "description": { "type": "string" },
+            "basePrice": { "type": "number" },
+            "maxMultiplier": {
+              "type": "object",
+              "properties": {
+                "season": { "type": "string" },
+                "value": { "type": "number" }
+              },
+              "required": ["season", "value"]
+            },
+            "adjustedPrice": { "type": "number" }
+          },
+          "required": ["type", "rating", "currency", "description", "basePrice", "maxMultiplier", "adjustedPrice"]
+        },
+        "meals": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "breakdown": {
+              "type": "object",
+              "properties": {
+                "breakfast": { "type": "number" },
+                "lunch": { "type": "number" },
+                "dinner": { "type": "number" }
+              },
+              "required": ["breakfast", "lunch", "dinner"]
+            },
+            "amount": { "type": "number" },
+            "currency": { "type": "string" },
+            "type": { "type": "string" }
+          },
+          "required": ["label", "breakdown", "amount", "currency", "type"]
+        }
+      },
+      "required": ["location", "travelRoute", "accommodations", "meals"]
+    }
+  },
+  "required": ["id", "label", "userId", "date", "homeOffice", "onSiteCosts"],
+  "definitions": {
+    "expenseCategory": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "amount": { "type": "number" },
+              "type": { "type": "string" },
+              "priority": { "type": "string" }
+            },
+            "required": ["id", "label", "amount", "type", "priority"]
+          }
+        }
+      },
+      "required": ["id", "label", "items"]
+    }
+  }
+}
