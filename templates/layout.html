@@ -7,27 +7,45 @@
   <link rel="stylesheet" href="/css/app.css">
   <script src="/js/app.js"></script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <title>Freelancer Rate Calculator</title>
 </head>
 
 <body>
-  <nav class="navbar">
-    <a href="/" class="nav-link{{if eq .ActivePage "home"}} active{{end}}">Freelanging Rate Calculator</a>
-    <a href="/admin" class="nav-link{{if eq .ActivePage "admin"}} active{{end}}">Administration</a>
-    <a href="/login" class="nav-link{{if eq .ActivePage "login"}} active{{end}}">Login</a>
-    <a href="/billing" class="nav-link{{if eq .ActivePage "billing"}} active{{end}}">Billing</a>
-    <a href="/settings" class="nav-link{{if eq .ActivePage "settings"}} active{{end}}">Settings</a>
-    <a href="/logout" class="nav-link{{if eq .ActivePage "logout"}} active{{end}}">Logout</a>
-  </nav>
-  <header>
-    {{block "header" .}}{{end}}
-  </header>
-  <div class="content-layout">
-    <main>
-      {{block "content" .}}{{end}}
-    </main>
-    <aside class="sidebar">
-      {{block "sidebar" .}}{{end}}
-    </aside>
+  <div class="navbar-layout">
+    <nav class="navbar">
+
+      <a href="/" class="nav-home">
+        <img src="/images/logo.svg" class="logo-img" alt="Freelanging Rate Calculator" />
+      </a>
+      <div class="nav-links">
+        {{if not .LoggedIn}}
+        <a href="/login" class="nav-link">Login</a>
+        {{end}}
+        {{if .Admin}}
+        <a href="/admin" class="nav-link">Administration</a>
+        {{end}}
+        {{if .LoggedIn}}
+        <a href="/billing" class="nav-link">Billing</a>
+        <a href="/settings" class="nav-link">Settings</a>
+        <a href="/logout" class="nav-link">Logout</a>
+        {{end}}
+      </div>
+    </nav>
+  </div>
+  <div class="layout">
+    <header>
+      {{block "header" .}}{{end}}
+    </header>
+    <div class="content-layout">
+      <main>
+        {{block "content" .}}{{end}}
+      </main>
+      {{if .Sidebar}}
+      <aside class="sidebar">
+        {{block "sidebar" .}}{{end}}
+      </aside>
+      {{end}}
+    </div>
   </div>
 </body>
 

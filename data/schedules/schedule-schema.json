@@ -25,11 +25,6 @@
       "type": "boolean",
       "description": "Whether this schedule is publicly available"
     },
-    "sortOrder": {
-      "type": "integer",
-      "minimum": 0,
-      "description": "Position in the list when displaying multiple schedules"
-    },
     "workSchedule": {
       "type": "object",
       "required": ["hoursPerWeek", "privateHolidays", "publicHolidays", "educationDays", "sickDays"],

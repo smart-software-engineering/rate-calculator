@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"smart-software-engineering/rate-calculator/rates"
 	"smart-software-engineering/rate-calculator/web"
 )
 
@@ -26,8 +27,13 @@ func main() {
 		csrfKey := []byte("01234567890123456789012345678901")
 		h := web.NewHandler(store, sessions, csrfKey)
 	*/
+	file, err := os.Open("data/schedules/romania.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
 
-	h := web.NewHandler()
+	h := web.NewHandler(rates.NewRateCalculator(file))
 
 	port := os.Getenv("PORT")
 	if port == "" {

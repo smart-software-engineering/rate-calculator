@@ -34,9 +34,9 @@ A modern, extensible web application for calculating freelancer rates, tracking 
    ```
 3. **Run the app:**
    ```sh
-   go run main.go
+   air
    ```
-4. **Visit:** [http://localhost:8080](http://localhost:8080)
+4. **Visit:** [http://localhost:3001](http://localhost:3001)
 
 ## Customization
 - Edit `data/expenses/combined-expenses-template.json` to adjust the default expense model.
@@ -48,4 +48,4 @@ MIT
 
 ---
 
-*Built with Go, htmx, Alpine.js, and a passion for freelancer empowerment.*
+*Built with Go, htmx and a passion for freelancer empowerment.*

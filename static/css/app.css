@@ -1,43 +1,192 @@
+/* CSS Reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1.5;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 /* CSS information */
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+:root {
+  --color-bg: #f8f9fa;
+  --color-navbar: #222;
+  --color-navbar-link: #eee;
+  --color-navbar-link-active: #fff;
+  --color-navbar-link-active-bg: #fff;
+  --color-navbar-link-active-text: #222;
+  --color-navbar-link-hover: #333;
+  --color-main-text: #222;
+  --color-sidebar-bg: #f4f4f4;
+  --color-border: #e0e0e0;
+  --layout-max-width: 1200px;
+  --layout-padding: 2rem;
+  --sidebar-width: 320px;
+  --logo-calc-bg: #fff;
+  --logo-calc-border: #222;
+  --logo-calc-key: #b0b0b0;
+  --logo-calc-key2: #e0e0e0;
+  --logo-calc-key3: #d1e7dd;
+  --logo-note: #1a8c3b;
+  --logo-note-border: #0a4c1a;
+  --logo-note-text: #fff;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-main-text);
+  margin: 0;
+  font-family: 'Noto Sans', system-ui, sans-serif;
+}
+
+.layout {
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
+}
+
+.navbar-layout {
+  width: 100%;
+  position: relative;
+  background: var(--color-navbar);
+  z-index: 10;
+}
+
 .navbar {
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 1rem var(--layout-padding);
+  width: 100vw;
+  position: relative;
   display: flex;
-  gap: 1.5rem;
-  background: #222;
-  padding: 1rem 2rem;
   align-items: center;
 }
+
+.navbar .nav-home {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: var(--color-navbar-link);
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-right: auto;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 1.2rem;
+  margin-left: auto;
+}
+
 .nav-link {
-  color: #eee;
+  color: var(--color-navbar-link);
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  transition: background 0.2s;
-}
-.nav-link:hover {
-  background: #333;
-}
-.nav-link.active {
-  background: #fff;
-  color: #222;
+  transition: background 0.2s, color 0.2s;
   font-weight: bold;
 }
+
+.nav-link:hover {
+  background: var(--color-navbar-link-hover);
+}
+
+.nav-link.active {
+  background: var(--color-navbar-link-active-bg);
+  color: var(--color-navbar-link-active-text);
+  font-weight: bold;
+}
+
+.header,
+header {
+  padding: 1.2rem 0 0.5rem 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--color-main-text);
+}
+
 .content-layout {
   display: flex;
   gap: 2rem;
-  margin: 2rem;
+  align-items: flex-start;
 }
+
 main {
-  flex: 0 0 70%;
-  background: #fafafa;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
 }
+
 .sidebar {
-  flex: 0 0 30%;
-  background: #f0f0f0;
-  padding: 2rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  background: var(--color-sidebar-bg);
+  border-left: 1px solid var(--color-border);
+  padding: 1.5rem 1rem;
+  min-width: var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  box-sizing: border-box;
+}
+
+.logo-img {
+  height: 2.1em;
+  width: auto;
+  margin-right: 0.7em;
+  vertical-align: middle;
+  background: none;
+}
+
+@media (max-width: 900px) {
+  .content-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    max-width: 100%;
+    min-width: 0;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
 }

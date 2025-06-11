@@ -1,27 +1,23 @@
 package web
 
 import (
-	"embed"
+	"context"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"smart-software-engineering/rate-calculator/rates"
+	"smart-software-engineering/rate-calculator/static"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-//go:embed ../../static/css/* ../../static/js/* ../../static/favicon.ico
-var staticFS embed.FS
-
-func init() {
-	// mime.AddExtensionType(".js", "application/javascript")
-	// mime.AddExtensionType(".css", "text/css")
-}
-
-func NewHandler() *Handler {
+func NewHandler(rates rates.RateCalculator) *Handler {
 	h := &Handler{
-		Mux: chi.NewRouter(),
+		Mux:            chi.NewRouter(),
+		RateCalculator: rates,
 	}
 
 	h.Use(middleware.RequestID)
@@ -42,8 +38,6 @@ func NewHandler() *Handler {
 
 	h.Get("/", h.Home())
 
-	h.Get("/show", h.Show())
-
 	// Mount the admin sub-router
 	h.Mount("/admin", adminRouter())
 
@@ -55,23 +49,34 @@ func NewHandler() *Handler {
 
 type Handler struct {
 	*chi.Mux
+
+	rates.RateCalculator
 }
 
 func (h *Handler) Home() http.HandlerFunc {
+	type data struct {
+		LayoutData
+		Schedules rates.Schedule
+		Inspect   string
+	}
 	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/home.html"))
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO pp, err := h.store.Posts()
-		tmpl.Execute(w, nil)
+		schedules, err := h.RateCalculator.Schedules()
+		if err != nil {
+			http.Error(w, "schedule unloadable", http.StatusBadRequest)
+		}
+		tmpl.Execute(w, data{Schedules: schedules, Inspect: fmt.Sprintf("%#v", schedules), LayoutData: LayoutData{LoggedIn: true, Admin: true}})
 	}
 }
 
-func (h *Handler) Show() http.HandlerFunc {
-	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/show.html"))
+type key string
 
-	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, nil)
-	}
+const userKey key = "user"
+
+type LayoutData struct {
+	LoggedIn bool
+	Admin    bool
 }
 
 func (h *Handler) withUser(next http.Handler) http.Handler {
@@ -85,8 +90,8 @@ func (h *Handler) withUser(next http.Handler) http.Handler {
 		// err := session.Save(r, w)
 
 		// TODO add the user here!
-		// ctx := context.WithValue(r.Context(), "user", nil)
-		next.ServeHTTP(w, r /* r.WithContext(ctx) */)
+		ctx := context.WithValue(r.Context(), userKey, nil)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
@@ -127,6 +132,6 @@ func (h *Handler) FileServer(path string, root http.FileSystem) {
 
 func (h *Handler) ServeStatic() {
 	// Serve embedded static files at root (e.g. /css/app.css)
-	fs := http.FS(staticFS)
+	fs := http.FS(static.StaticFS)
 	h.FileServer("/", fs)
 }
