@@ -2,22 +2,25 @@ package web
 
 import (
 	"context"
+	"embed"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log"
 	"net/http"
 	"smart-software-engineering/rate-calculator/rates"
-	"smart-software-engineering/rate-calculator/static"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewHandler(rates rates.RateCalculator) *Handler {
+func NewHandler(rates rates.RateCalculator, staticFS embed.FS, templateFS embed.FS) *Handler {
 	h := &Handler{
 		Mux:            chi.NewRouter(),
 		RateCalculator: rates,
+		StaticFS:       staticFS,
+		TemplateFS:     templateFS,
 	}
 
 	h.Use(middleware.RequestID)
@@ -51,6 +54,8 @@ type Handler struct {
 	*chi.Mux
 
 	rates.RateCalculator
+	TemplateFS embed.FS
+	StaticFS   embed.FS
 }
 
 func (h *Handler) Home() http.HandlerFunc {
@@ -59,7 +64,7 @@ func (h *Handler) Home() http.HandlerFunc {
 		Schedules rates.Schedule
 		Inspect   string
 	}
-	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/home.html"))
+	tmpl := template.Must(template.ParseFS(h.TemplateFS, "templates/layout.html", "templates/home.html"))
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		schedules, err := h.RateCalculator.Schedules()
@@ -131,7 +136,11 @@ func (h *Handler) FileServer(path string, root http.FileSystem) {
 }
 
 func (h *Handler) ServeStatic() {
-	// Serve embedded static files at root (e.g. /css/app.css)
-	fs := http.FS(static.StaticFS)
-	h.FileServer("/", fs)
+	staticSub, err := fs.Sub(h.StaticFS, "static")
+	if err != nil {
+		log.Fatal("Failed to get static subdirectory from embed FS: ", err)
+	}
+	fsys := http.FS(staticSub)
+
+	h.FileServer("/", fsys)
 }

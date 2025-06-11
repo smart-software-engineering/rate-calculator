@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"net/http"
 	"os"
@@ -8,9 +9,11 @@ import (
 	"smart-software-engineering/rate-calculator/web"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello world")
-}
+//go:embed static/**
+var StaticFS embed.FS
+
+//go:embed templates
+var TemplateFS embed.FS
 
 func main() {
 	/*
@@ -33,7 +36,7 @@ func main() {
 	}
 	defer file.Close()
 
-	h := web.NewHandler(rates.NewRateCalculator(file))
+	h := web.NewHandler(rates.NewRateCalculator(file), StaticFS, TemplateFS)
 
 	port := os.Getenv("PORT")
 	if port == "" {
