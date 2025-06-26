@@ -1,25 +1,36 @@
-# fly.toml app configuration file generated for rate-calculator-hidden-butterfly-9065 on 2025-06-12T01:22:23+02:00
+# fly.toml app configuration file generated for rate-calculator on 2025-06-26T09:51:26+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'rate-calculator'
-primary_region = 'otp'
+primary_region = 'fra'
+kill_signal = 'SIGTERM'
 
 [build]
-  [build.args]
-    GO_VERSION = '1.24.3'
+
+[deploy]
+  release_command = '/app/bin/migrate'
 
 [env]
-  PORT = '3000'
+  PHX_HOST = 'rate-calculator.fly.dev'
+  PORT = '8080'
 
 [http_service]
-  internal_port = 3000
+  internal_port = 4000
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
 
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
 [[vm]]
   size = 'shared-cpu-1x'
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
